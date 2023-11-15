@@ -3,6 +3,7 @@ import { ThemeProvider } from '@mui/material';
 import theme from './theme';
 import SignInSide from "./components/session/loginScreen";
 import About from "./components/session/aboutScreen";
+import About from "./components/session/aboutScreen";
 import NavBar from "./components/utils/navBar"
 import { CustomProvider } from "./components/context/provider";
 

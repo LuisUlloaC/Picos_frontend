@@ -8,7 +8,6 @@ body {
   src: local('Nico Moji'), url(./assets/Nico-Moji.ttf) format('truetype');
 }
 
-
 .container {
   display: flex;
   background-image: url(./assets/portada.png);

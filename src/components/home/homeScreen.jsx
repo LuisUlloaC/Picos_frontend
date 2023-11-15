@@ -5,10 +5,11 @@ import NavBar from "../utils/navBar";
 import ContractsView from "./contracts";
 import DocumentsView from "./documents";
 import ReportsView from "./reports";
+import Products from "./products";
+import BillsView from "./bills";
 import { useEffect } from "react";
 import { Context } from "../context/provider";
 import AdminHome from "../admin/adminHome";
-import Products from "./products";
 
 export default function HomeScreen() {
   let navigate = useNavigate();

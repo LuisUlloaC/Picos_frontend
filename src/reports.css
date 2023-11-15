@@ -21,7 +21,7 @@
 
 }
 
-.dropdown .options {
+.option {
     display: flex;
     font-family: 'Nico Moji';
 }

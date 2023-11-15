@@ -3,7 +3,7 @@ import IconButton from '@mui/material/IconButton';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 
 
-export default function ReportsView({ reportes = [] }) {
+export default function BillsView({ facturas = [] }) {
     const currentYear = new Date().getFullYear();
     const years = Array.from({ length: currentYear - 2000 + 1 }, (_, i) => 2000 + i);
     const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
@@ -11,7 +11,7 @@ export default function ReportsView({ reportes = [] }) {
 
     return (
         <>
-            <div className="title">Reportes</div>
+            <div className="title">Facturas</div>
             <div className='selector-container'>
                 <div className='selector' >
                 <label for="years">Elija un año:</label>
@@ -31,13 +31,13 @@ export default function ReportsView({ reportes = [] }) {
                 </div>
             </div>
             <div className="list">
-                {reportes.map((reporte, index) => (
+                {facturas.map((factura, index) => (
                     <div key={index}>
                         <IconButton
                             sx={{ '&:hover': { backgroundColor: 'transparent' } }}
                             style={{ display: 'flex', flexDirection: 'row' }}>
                             <DescriptionOutlinedIcon style={{ fontSize: '10vh', color: '#000' }} />
-                            <span>{reporte.name}</span>
+                            <span>{factura.name}</span>
                         </IconButton>
                     </div>
                 ))}

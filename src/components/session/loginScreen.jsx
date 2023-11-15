@@ -7,7 +7,6 @@ import LogoUserLogin from "../../assets/logo-userLogin";
 export default function LoginScreen() {
   let navigate = useNavigate();
   const { state, setState } = React.useContext(Context);
-  const [wrongCredentials, setWrongCredentials] = React.useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();

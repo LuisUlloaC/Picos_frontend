@@ -1,11 +1,11 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from '@mui/material';
 import theme from './theme';
-import SignInSide from "./components/session/loginScreen";
-import About from "./components/session/aboutScreen";
+import StartScreen from "./components/session/startScreen";
 import About from "./components/session/aboutScreen";
 import NavBar from "./components/utils/navBar"
 import { CustomProvider } from "./components/context/provider";
+import LoginScreen from "./components/session/loginScreen";
 
 function App() {
   return (
@@ -13,7 +13,8 @@ function App() {
       <CustomProvider  >
         <Router >
           <Routes >
-              <Route path="/" element={<SignInSide/>}/>
+              <Route path="/" element={<StartScreen/>}/>
+              <Route path="/login" element={<LoginScreen/>}/>
               <Route path="/about" element={<About/>}/>
               <Route path="/home" element={<NavBar/>}/>
           </Routes>

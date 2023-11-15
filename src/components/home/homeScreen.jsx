@@ -4,16 +4,29 @@ import { useNavigate } from "react-router-dom";
 import NavBar from "../utils/navBar";
 import Products from "./products";
 import StorageView from "./storage";
+import { useEffect } from "react";
+import { Context } from "../context/provider";
+import AdminHome from "../admin/adminHome";
 
 export default function HomeScreen() {
   let navigate = useNavigate();
+  const {state, setState} = React.useContext(Context);
+
+  useEffect(() => {
+    if (state === false) {
+        navigate("/login");
+    }
+  })
 
   return (
     <div className="home-container">
         <div className="home-header">
             <NavBar/>
         </div>
-        <StorageView/>
+        {state.isAdmin
+        ? <AdminHome />
+        :<StorageView/>
+        }
     </div>
   );
 }

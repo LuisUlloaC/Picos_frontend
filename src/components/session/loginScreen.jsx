@@ -17,7 +17,8 @@ export default function LoginScreen() {
       setState({ ...state, user: data.get("username"), isAdmin: true });
       navigate("/home");
     } else {
-      setWrongCredentials(true);
+      setState({ ...state, user: data.get("username"), isAdmin: false });
+      navigate("/home");
     }
   };
 

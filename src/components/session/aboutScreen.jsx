@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
 import { Context } from "../context/provider";
+import "../../about.css"
 
 export default function About() {
   let navigate = useNavigate();

@@ -8,6 +8,7 @@ import ReportsView from "./reports";
 import { useEffect } from "react";
 import { Context } from "../context/provider";
 import AdminHome from "../admin/adminHome";
+import Products from "./products";
 
 export default function HomeScreen() {
   let navigate = useNavigate();
@@ -26,7 +27,7 @@ export default function HomeScreen() {
         </div>
         {state.isAdmin
         ? <AdminHome />
-        :<StorageView/>
+        :<Products/>
         }
     </div>
   );

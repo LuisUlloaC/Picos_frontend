@@ -1,0 +1,27 @@
+.selector-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding-top: 2%;
+    width: 40%;
+} 
+
+.selector-container .selector {
+    display: flex;
+    flex-direction: column;
+}
+
+.selector .dropdown {
+    display: flex;
+    outline: none;
+    border: none;
+    height: 50%;
+    font-family: 'Nico Moji';
+    border-radius: 2px;
+
+}
+
+.dropdown .options {
+    display: flex;
+    font-family: 'Nico Moji';
+}

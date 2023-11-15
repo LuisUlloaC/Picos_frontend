@@ -10,10 +10,10 @@ import Typography from "@mui/material/Typography";
 import { useNavigate } from "react-router-dom";
 import { Context } from "../context/provider";
 import colors from "../../colors";
-import portada from "../../assets/portada.png";
+import portada from "../../assets/about.png";
 import { AnchorSharp } from "@mui/icons-material";
 
-export default function SignInSide() {
+export default function About() {
   let navigate = useNavigate();
   const { state, setState } = React.useContext(Context);
   const [wrongCredentials, setWrongCredentials] = React.useState(false);
@@ -30,10 +30,15 @@ export default function SignInSide() {
   };
 
   return (
-    <div className="container">
-      <div className="centered-text">Centro Comercial Picos</div>
-      <div className="bottom-text">85 años cultivando la excelencia</div>
-      <div className="top-text"><span className="spaced-word">Inicio</span> Info</div>
+    <div className="about_screen">
+      <div className="pico_text">Picos</div>
+      <div className="inicio_text">Inicio</div>
+      <div className="info_text">"Familia Picos: Tradición Agrícola de 85 Años"</div>
+      <div className="info_big_text">
+        Enraizados en la pasión por la tierra y la agricultura, la familia Picos ha cultivado cítricos y productos agrícolas orgánicos 
+        durante más de ocho décadas. Nuestra historia es un legado de compromiso con la calidad, el respeto por la naturaleza y la 
+        sostenibilidad. Desde la primera generación hasta la actual, hemos mantenido nuestro compromiso con la excelencia agrícola y 
+        la producción orgánica. Bienvenidos a nuestra historia, bienvenidos a la familia Picos.</div>
     </div>
   );
 }

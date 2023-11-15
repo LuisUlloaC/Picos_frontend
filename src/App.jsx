@@ -3,9 +3,9 @@ import { ThemeProvider } from '@mui/material';
 import theme from './theme';
 import StartScreen from "./components/session/startScreen";
 import About from "./components/session/aboutScreen";
-import NavBar from "./components/utils/navBar"
 import { CustomProvider } from "./components/context/provider";
 import LoginScreen from "./components/session/loginScreen";
+import HomeScreen from "./components/home/homeScreen";
 
 function App() {
   return (
@@ -16,7 +16,7 @@ function App() {
               <Route path="/" element={<StartScreen/>}/>
               <Route path="/login" element={<LoginScreen/>}/>
               <Route path="/about" element={<About/>}/>
-              <Route path="/home" element={<NavBar/>}/>
+              <Route path="/home" element={<HomeScreen/>}/>
           </Routes>
         </Router>
       </CustomProvider>

@@ -17,10 +17,11 @@ export default function ProductCard({image = '../../assets/portada.png', product
                 image={image}
             />
             <CardContent>
+                <span>{productName}</span>
                 <span>{aviableCuantity}KG</span>
             </CardContent>
             <CardActions>
-                <IconButton aria-label="add to favorites">
+                <IconButton>
                     <AttachMoneyOutlinedIcon />
                     <span>{price}</span>
                 </IconButton>

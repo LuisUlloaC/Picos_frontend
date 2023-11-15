@@ -2,8 +2,9 @@ import * as React from "react";
 import '../../home.css'
 import { useNavigate } from "react-router-dom";
 import NavBar from "../utils/navBar";
-import Products from "./products";
-import StorageView from "./storage";
+import ContractsView from "./contracts";
+import DocumentsView from "./documents";
+import ReportsView from "./reports";
 import { useEffect } from "react";
 import { Context } from "../context/provider";
 import AdminHome from "../admin/adminHome";

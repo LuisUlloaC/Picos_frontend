@@ -8,4 +8,65 @@ body {
   src: local('Nico Moji'), url(./assets/Nico-Moji.ttf) format('truetype');
 }
 
+
+.container {
+  display: flex;
+  background-image: url(./assets/portada.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100vw;
+  height: 100vh;
+  max-width: 100vw;
+  max-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-align: center;
+}
+
+.centered-text {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  max-width: 1vw;
+  justify-content: center;
+  font-size: 425%;
+}
+
+.bottom-text {
+  display: flex;
+  font-size: 200%;
+  position: absolute;
+  margin-bottom: 4vh;
+  bottom: 0;
+  left: 50;
+  right: 50;
+}
+
+.top-text {
+  display: flex;
+  font-size: 200%;
+  position: absolute;
+  margin-top: 5vh;
+  top: 0;
+  left: 1;
+  right: 0;
+  margin-right: 10vh;
+}
+
+.spaced-word {
+  margin-right: 50px;
+ }
  
+ .about_screen {
+  display: flex;
+  font-size: 200%;
+  position: absolute;
+  margin-top: 5vh;
+  top: 0;
+  left: 0;
+  right: 1;
+  margin-right: 10vh;
+  color: white;
+}

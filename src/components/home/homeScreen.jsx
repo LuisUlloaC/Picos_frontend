@@ -12,21 +12,15 @@ import { Context } from "../context/provider";
 import AdminHome from "../admin/adminHome";
 
 export default function HomeScreen() {
-  let navigate = useNavigate();
   const {state, setState} = React.useContext(Context);
-
-  useEffect(() => {
-    if (state === false) {
-        navigate("/login");
-    }
-  })
+  
 
   return (
     <div className="home-container">
         <div className="home-header">
             <NavBar/>
         </div>
-        {state.isAdmin
+        {state.role === "admin"
         ? <AdminHome />
         :<Products/>
         }

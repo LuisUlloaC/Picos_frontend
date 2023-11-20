@@ -52,7 +52,7 @@
     display: flex;
     text-align: center;
     font-family: 'Nico Moji';
-    min-width: 30%;
+    width: 20%;
     margin-left: 10%;
     outline: none;
     border: none;

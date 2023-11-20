@@ -8,13 +8,22 @@ import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import { Context } from '../context/provider';
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 
 export default function NavBar() {
     const { state, setState } = React.useContext(Context)
+    let navigate = useNavigate();
+
+    useEffect(() => {
+        if (!state.access) {
+            navigate("/login");
+        }
+      }, [state])
 
     const logout = () => {
-        setState(false)
+        setState({})
     }
 
     return (
@@ -22,7 +31,7 @@ export default function NavBar() {
                 <Toolbar>
                     <Box sx={{ flexGrow: 1 }} />
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                        {state.isAdmin
+                        {state.role === 'admin'
                         ? 
                         <IconButton size="large" color="primary">
                             <Badge color="error">

@@ -8,7 +8,7 @@ import AttachMoneyOutlinedIcon from '@mui/icons-material/AttachMoneyOutlined';
 import AddShoppingCartOutlinedIcon from '@mui/icons-material/AddShoppingCartOutlined';
 
 
-export default function ProductCard({image = '../../assets/portada.png', productName = 'product', price = '0', aviableCuantity = '0'}) {
+export default function ProductCard({image = '../../assets/portada.png', name = 'product', price = '0', stock = '0'}) {
     return (
         <Card sx={{ width: '15%', height: '40%', margin: '1%' }}>
             <CardMedia
@@ -17,8 +17,9 @@ export default function ProductCard({image = '../../assets/portada.png', product
                 image={image}
             />
             <CardContent>
-                <span>{productName}</span>
-                <span>{aviableCuantity}KG</span>
+                <span>{name}</span>
+                <br/>
+                <span>{stock}KG</span>
             </CardContent>
             <CardActions>
                 <IconButton>

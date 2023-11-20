@@ -3,22 +3,43 @@ import '../../login.css'
 import { useNavigate } from "react-router-dom";
 import { Context } from "../context/provider";
 import LogoUserLogin from "../../assets/logo-userLogin";
+import { userLogin } from '../../actions/auth';
 
 export default function LoginScreen() {
   let navigate = useNavigate();
-  const { state, setState } = React.useContext(Context);
+  const { state, setState, api } = React.useContext(Context)
+  const [wrongCredentials, setWrongCredentials] = React.useState(false)
+
+  React.useEffect(() => {
+    if (state.access) {
+      navigate("/home");
+    }
+  })
+
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log(data.get("username"));
-    if (data.get("username") === "admin" && data.get("password") === "admin") {
-      setState({ ...state, user: data.get("username"), isAdmin: true });
+
+    (async () => {
+    const response = await userLogin(
+      api,
+      data.get('username'),
+      data.get('password'),
+    )
+    if (response.sucess) {
+      let token = response.state_data.access.split(".")[1];
+      while (token.length % 4 !== 0) {
+        token += '=';
+      };
+      response.state_data.role = JSON.parse(atob(token)).role;
+      setState(response.state_data);
       navigate("/home");
     } else {
-      setState({ ...state, user: data.get("username"), isAdmin: false });
-      navigate("/home");
+      setWrongCredentials(true);
     }
+    })()
+
   };
 
   return (

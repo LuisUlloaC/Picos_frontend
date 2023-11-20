@@ -1,20 +1,29 @@
 import React, { createContext, useState, useEffect } from 'react';
+import axios from 'axios';
 
-export const Context = createContext();
+export const Context = createContext(false);
 
 export function CustomProvider({ children }) {
- const [state, setState] = useState(() => {
   const savedState = sessionStorage.getItem('Session');
-  return savedState ? JSON.parse(savedState) : null;
- });
+  const [state, setState] = useState(savedState ? JSON.parse(savedState) : {});
+  const api = axios.create({
+    baseURL: "http://localhost:3000/"
+  });
 
- useEffect(() => {
-  sessionStorage.setItem('Session', JSON.stringify(state));
-  console.log('STATE CHANGED: ', state)
- }, [state]);
- return (
-   <Context.Provider value={{ state, setState}}>
-     {children}
-   </Context.Provider>
- );
+  if (state.access) {
+    api.defaults.headers.common["Authorization"] = "Bearer "+state.access;
+  }
+  useEffect(() => {
+    sessionStorage.setItem('Session', JSON.stringify(state));
+    if (state.access) {
+      api.defaults.headers.common["Authorization"] = "Bearer "+state.access;
+    } else {
+      delete api.defaults.headers.common["Authorization"];
+    }
+  }, [state]);
+  return (
+    <Context.Provider value={{ state, setState, api }}>
+      {children}
+    </Context.Provider>
+  );
 }

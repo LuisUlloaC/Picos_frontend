@@ -16,15 +16,17 @@ export default function NavBar() {
     const { state, setState } = React.useContext(Context)
     let navigate = useNavigate();
 
-    useEffect(() => {
+    /*useEffect(() => {
         if (!state.access) {
             navigate("/login");
         }
       }, [state])
-
+      */
     const logout = () => {
         setState({})
     }
+
+
 
     return (
             <AppBar position="static" elevation={0} sx={{ flexGrow: 1, backgroundColor: 'transparent'}}>

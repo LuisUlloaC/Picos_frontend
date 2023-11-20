@@ -12,7 +12,8 @@ import { Context } from "../context/provider";
 import AdminHome from "../admin/adminHome";
 
 export default function HomeScreen() {
-  const {state, setState} = React.useContext(Context);
+  const { state, setState } = React.useContext(Context);
+  const [view, setView] = React.useState('home');
   
 
   return (
@@ -20,8 +21,8 @@ export default function HomeScreen() {
         <div className="home-header">
             <NavBar/>
         </div>
-        {state.role === "admin"
-        ? <AdminHome />
+        {/*state.role*/ "admin" === "admin"
+        ? <AdminHome view={view} setView={setView} />
         :<Products/>
         }
     </div>

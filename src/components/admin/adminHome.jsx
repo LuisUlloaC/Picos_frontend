@@ -11,8 +11,7 @@ import BillsView from "../home/bills";
 import "./admin.css"
 import Products from "../home/products";
 
-export default function AdminHome() {
-    const [view, setView] = React.useState('home')
+export default function AdminHome({view, setView}) {
 
     return(
         <>

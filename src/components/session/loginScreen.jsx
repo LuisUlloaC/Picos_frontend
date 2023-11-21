@@ -33,6 +33,8 @@ export default function LoginScreen() {
         token += '=';
       };
       response.state_data.role = JSON.parse(atob(token)).role;
+      response.state_data.view = 'home';
+      response.state_data.cart = [];
       setState(response.state_data);
       navigate("/home");
     } else {

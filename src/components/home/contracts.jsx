@@ -1,9 +1,31 @@
+import * as React from "react";
 import IconButton from '@mui/material/IconButton';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
+import {Context} from '../context/provider';
+import { useContext } from 'react';
+import { getContracts } from "../../actions/contracts";
 
 
-export default function ContractsView({ contratos = [] }) {
+export default function ContractsView() {
+    const { state, setState, api } = useContext(Context);
+    const [contracts, setContracts] = React.useState([]);
+
+    const setView = (view) => {
+        setState(oldState => ({
+            ...oldState,
+            view: view
+        }));
+    }
+
+    React.useEffect(() => {
+        ( async () => {
+            let response = await getContracts(api);
+            if (response?.sucess) {
+                setContracts(response.result.contracts);
+            }
+        })();
+    }, [])
     return (
         <>
             <div className="title">Contratos</div>
@@ -11,9 +33,11 @@ export default function ContractsView({ contratos = [] }) {
                 <IconButton>
                     <AddOutlinedIcon style={{ fontSize: '20vh', color: '#000' }} />
                 </IconButton>
-                {contratos.map((contrato, index) => (
-                    <div key={index}>
-                        <IconButton style={{ display: 'flex', flexDirection: 'column' }}>
+                {contracts.map((contrato) => (
+                    <div key={contrato.id}>
+                        <IconButton sx={{ '&:hover': { backgroundColor: 'transparent' } }}
+                         style={{ display: 'flex', flexDirection: 'column', fontFamily: 'Nico Moji' }}
+                         onClick={() => {setView('document/'+contrato.id)}}>
                             <DescriptionOutlinedIcon style={{ fontSize: '20vh', color: '#000' }} />
                             <span>{contrato.date}</span>
                         </IconButton>

@@ -11,18 +11,28 @@ import BillsView from "../home/bills";
 import "./admin.css"
 import Products from "../home/products";
 
-export default function AdminHome({view, setView}) {
+import { Context } from "../context/provider";
+
+export default function AdminHome() {
+    const { state, setState } = React.useContext(Context);
+
+    const setView = (view) => {
+        setState(oldState => ({
+            ...oldState,
+            view: view
+        }));
+    }
 
     return(
         <>
-            {view === 'home' ? 
+            {state.view === 'home' ? 
                 <div className="admin-layout">
                     <IconButton
                     sx={{ "&:hover": { backgroundColor: "transparent"} }}
                     style={{ display: "flex", flexDirection: "column", fontFamily: "Nico Moji" }}
-                    onClick={() => setView('documents')}>
+                    onClick={() => setView('contracts')}>
                         <DescriptionOutlinedIcon style={{ fontSize: "30vh", color: "#000" }}/>
-                        <span>Documento</span>
+                        <span>Contratos</span>
                     </IconButton>
 
                     <IconButton
@@ -43,9 +53,10 @@ export default function AdminHome({view, setView}) {
                 </div>
                 : null
             }
-            {view === 'documents' ? <DocumentsView/> : null}
-            {view === 'storage' ? <Products/> : null}
-            {view === 'bills' ? <BillsView/> : null}
+            {state.view === 'contracts' ? <ContractsView/> : null}
+            {state.view === 'storage' ? <Products/> : null}
+            {state.view === 'bills' ? <BillsView/> : null}
+            {state.view.startsWith('document/') ? <DocumentsView contractId={state.view.split('/')[1]} /> : null}
         
         
         </>

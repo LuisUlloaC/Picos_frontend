@@ -12,12 +12,30 @@ export const getProducts = async (api) => {
     .catch(res => {
         sucess = false;
         response = res;
-        //result = res.data.products;
     });
     return({sucess: sucess, response:response, result:result})
 }
 
 
-export const setProduct = async (api) => {
+export const createProduct = async (api) => {
+
+}
+
+export const deleteProduct = async (api, id) => {
+    let result = null;
+    let response = null;
+    let sucess = false;
+
+    await api.delete('/products/'+id)
+    .then(res => {
+        sucess = true;
+        response = res;
+    })
+    .catch(res => {
+        sucess = false;
+        response = res;
+    });
+    
+    return({sucess: sucess, response:response, result:result})
 
 }

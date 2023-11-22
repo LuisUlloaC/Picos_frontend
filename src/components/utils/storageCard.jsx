@@ -10,11 +10,13 @@ import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
 import AttachMoneyOutlinedIcon from '@mui/icons-material/AttachMoneyOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { deleteProduct } from '../../actions/products';
+import { deleteProduct, editProduct } from '../../actions/products';
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 
 
-export default function StorageCard({ image = '../../assets/portada.png', name = 'product', price = '0', stock = '0', api }) {
+export default function StorageCard({ image = '', name = 'product', price = '0', stock = '0', api, id=0 }) {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => {
         setOpen(true);
@@ -22,6 +24,26 @@ export default function StorageCard({ image = '../../assets/portada.png', name =
     const handleClose = () => {
         setOpen(false);
     };
+
+
+    const formik = useFormik({
+        initialValues: {
+            id: id,
+            name: name,
+            price: price,
+            stock: stock,
+        },
+        validationSchema: Yup.object({
+            id: Yup.number(),
+            name: Yup.string(),
+            price: Yup.number(),
+            stock: Yup.string(),
+        }),
+        onSubmit:async (values) => {
+            console.log(values);
+            await editProduct(api, id, values.name, values.stock, values.price)
+        }
+    })
 
     const style = {
         display: 'flex',
@@ -42,7 +64,7 @@ export default function StorageCard({ image = '../../assets/portada.png', name =
         px: 4,
         pb: 3,
         alignItems: 'center'
-        
+
     };
 
     return (
@@ -53,30 +75,36 @@ export default function StorageCard({ image = '../../assets/portada.png', name =
                 onClose={handleClose}
             >
                 <Box sx={{ ...style }}>
+
                     <h2 id="child-modal-title">Editar producto</h2>
-                    <div style={{display: 'flex', width: '80%', height: '100%',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'space-evenly'}}>
-                        <div style={{ display: 'flex', width: '100%',justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
+                    <form style={{
+                        display: 'flex', width: '80%', minHeight: '95%',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'space-evenly'
+                    }}>
+                        <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
                             <span>Nombre: </span>
-                            <input className='card-input' defaultValue={name} style={{width: '50%'}} />
+                            <input className='card-input' style={{ width: '50%' }} {...formik.getFieldProps("name")} />
+                            {formik.touched.name && formik.errors.name ? (
+                                <span>{formik.errors.name}</span>
+                            ) : null}
                         </div>
-                        <div style={{ display: 'flex', width: '100%',justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
+                        <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
                             <span>Cantidad: </span>
-                            <input className='card-input' defaultValue={stock} style={{width: '50%'}} />
+                            <input className='card-input' style={{ width: '50%' }} {...formik.getFieldProps("stock")} />
                         </div>
-                        <div style={{ display: 'flex', width: '100%',justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
+                        <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
                             <span>Precio: </span>
-                            <div style={{display: 'flex' , width: '56%', justifyContent: 'space-between'}}>
-                            <input className='card-input' defaultValue={price} style={{width: '100%', marginRight: '5%'}} />
-                            <AttachMoneyOutlinedIcon />
+                            <div style={{ display: 'flex', width: '56%', justifyContent: 'space-between' }}>
+                                <input className='card-input' style={{ width: '100%', marginRight: '5%' }} {...formik.getFieldProps("price")} />
+                                <AttachMoneyOutlinedIcon />
                             </div>
                         </div>
-                    </div>
-                    <IconButton style={{display: 'flex'}}>
-                    <ArrowForwardIosIcon/>
-                    </IconButton>
+                        <IconButton style={{ display: 'flex' }} onClick={formik.handleSubmit}>
+                            <ArrowForwardIosIcon />
+                        </IconButton>
+                    </form>
                 </Box>
             </Modal>
 
@@ -91,7 +119,7 @@ export default function StorageCard({ image = '../../assets/portada.png', name =
                     <span>{stock}KG</span>
                 </CardContent>
                 <CardActions style={{ display: 'flex', direction: 'rtl', minHeight: '20%', alignItems: 'center' }}>
-                    <IconButton onClick={(async () => await deleteProduct(api))}>
+                    <IconButton onClick={(async () => await deleteProduct(api, id))}>
                         <DeleteOutlineOutlinedIcon />
                     </IconButton>
                     <IconButton onClick={handleOpen}>

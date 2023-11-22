@@ -20,7 +20,7 @@ export function CustomProvider({ children }) {
     } else {
       delete api.defaults.headers.common["Authorization"];
     }
-  }, [state]);
+  }, [state, api]);
   return (
     <Context.Provider value={{ state, setState, api }}>
       {children}

@@ -5,7 +5,6 @@ import WarehouseIcon from '@mui/icons-material/Warehouse';
 import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
 import ContractsView from "../home/contracts";
 import DocumentsView from "../home/documents";
-import ReportsView from "../home/reports";
 import BillsView from "../home/bills";
 
 import "./admin.css"

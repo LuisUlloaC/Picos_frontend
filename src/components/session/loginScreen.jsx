@@ -8,7 +8,6 @@ import { userLogin } from '../../actions/auth';
 export default function LoginScreen() {
   let navigate = useNavigate();
   const { state, setState, api } = React.useContext(Context)
-  const [wrongCredentials, setWrongCredentials] = React.useState(false)
 
   React.useEffect(() => {
     if (state.access) {
@@ -38,7 +37,7 @@ export default function LoginScreen() {
       setState(response.state_data);
       navigate("/home");
     } else {
-      setWrongCredentials(true);
+      console.log(true);
     }
     })()
 

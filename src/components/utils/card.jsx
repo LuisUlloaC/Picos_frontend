@@ -9,26 +9,27 @@ import AddShoppingCartOutlinedIcon from '@mui/icons-material/AddShoppingCartOutl
 import { Context } from '../context/provider';
 
 
-export default function ProductCard({ image = '../../assets/portada.png',id , name = 'product', price = '0', stock = '0' }) {
+export default function ProductCard({ image = '../../assets/portada.png',id , name = 'product', price = 0, stock = '0' }) {
     const [inputValue, setInputValue] = React.useState('');
 
     const handleInputChange = (event) => {
         setInputValue(event.target.value);
     };
-    const { state, setState, api } = React.useContext(Context);
+    const { setState } = React.useContext(Context);
 
-    const addToCart = (amount) => {
+    const addToCart = (amount, price) => {
         setState(oldState => {
             let oldCart = oldState.cart;
             let found = false;
             for (let element of oldCart) {
-                if (element.productId === id) {
+                if (element.product_id === id) {
                     element.amount += Number(amount);
+                    element.price += Number(price)*Number(amount    )
                     found = true;
                 }
             }
             if (!found) {
-                oldCart = oldCart.concat({ productId: id, productName: name, amount: Number(amount) })
+                oldCart = oldCart.concat({ product_id: id, productName: name, amount: Number(amount), price: Number(price)*Number(amount) })
             }
             return ({
                 ...oldState,
@@ -50,7 +51,7 @@ export default function ProductCard({ image = '../../assets/portada.png',id , na
                     <span>{stock}KG</span>
                 </div>
 
-                <IconButton onClick={() => {addToCart(inputValue)}}>
+                <IconButton onClick={() => {addToCart(inputValue, price)}}>
                     <AddShoppingCartOutlinedIcon />
                 </IconButton>
             </CardContent>

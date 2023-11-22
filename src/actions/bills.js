@@ -27,7 +27,7 @@ export const checkoutOrder = async (api, items) => {
     let response = null;
     let result = null;
 
-    await api.post('/checkout', {items})
+    await api.post('/checkout', {items: items})
     .then(res => {
         sucess = true;
         response = res;

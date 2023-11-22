@@ -52,7 +52,10 @@ export const createContractIssue = async (api, contract_id, template_id,
     let result = null;
 
     await api.post("/issues/", {contract_id, template_id, form_data:{
-        bank_office, bank_location, bank_name, account_number
+        bank_office: bank_office, 
+        bank_location: bank_location, 
+        bank_name: bank_name, 
+        account_number: account_number
     }})
     .then(res => {
         sucess = true;

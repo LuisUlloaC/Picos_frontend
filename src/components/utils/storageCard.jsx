@@ -13,17 +13,27 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { deleteProduct, editProduct } from '../../actions/products';
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { getProductImage } from '../../actions/products';
 
 
 
 export default function StorageCard({ image = '', name = 'product', price = '0', stock = '0', api, id=0 }) {
     const [open, setOpen] = React.useState(false);
+    const [imageURL, setImageURL] = React.useState('../../assets/portada.png');
     const handleOpen = () => {
         setOpen(true);
     };
     const handleClose = () => {
         setOpen(false);
     };
+
+    React.useEffect( () => {
+
+        (async() => {
+            let result = await getProductImage(api, image);
+            setImageURL(result.result);
+        })()
+    })
 
 
     const formik = useFormik({
@@ -40,8 +50,8 @@ export default function StorageCard({ image = '', name = 'product', price = '0',
             stock: Yup.string(),
         }),
         onSubmit:async (values) => {
-            console.log(values);
-            await editProduct(api, id, values.name, values.stock, values.price)
+            await editProduct(api, id, values.name, values.stock, values.price);
+            handleClose()
         }
     })
 
@@ -112,7 +122,7 @@ export default function StorageCard({ image = '', name = 'product', price = '0',
                 <CardMedia
                     component="img"
                     height="50%"
-                    image={image}
+                    image={imageURL}
                 />
                 <CardContent style={{ display: 'flex', flexDirection: 'column', height: '15%' }}>
                     <span>{name}</span>

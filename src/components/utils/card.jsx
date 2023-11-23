@@ -7,16 +7,24 @@ import IconButton from '@mui/material/IconButton';
 import AttachMoneyOutlinedIcon from '@mui/icons-material/AttachMoneyOutlined';
 import AddShoppingCartOutlinedIcon from '@mui/icons-material/AddShoppingCartOutlined';
 import { Context } from '../context/provider';
+import { getProductImage } from '../../actions/products';
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
-
-export default function ProductCard({ image = '../../assets/portada.png',id , name = 'product', price = 0, stock = '0' }) {
+export default function ProductCard({ image ,id , name = 'product', price = 0, stock = '0' }) {
     const [inputValue, setInputValue] = React.useState('');
+   
+    const { setState, api } = React.useContext(Context);
 
-    const handleInputChange = (event) => {
-        setInputValue(event.target.value);
-    };
-    const { setState } = React.useContext(Context);
+    const [imageURL, setImageURL] = React.useState('../../assets/portada.png');
 
+    React.useEffect( () => {
+
+        (async() => {
+            let result = await getProductImage(api, image);
+            setImageURL(result.result);
+        })()
+    })
     const addToCart = (amount, price) => {
         setState(oldState => {
             let oldCart = oldState.cart;
@@ -38,12 +46,25 @@ export default function ProductCard({ image = '../../assets/portada.png',id , na
         })
     }
 
+    const formik = useFormik({
+        initialValues: {
+            amount: "",
+        },
+        validationSchema: Yup.object({
+            amount: Yup.number('Debe ser un número').positive('Debe ser un número positivo'),
+        }),
+        onSubmit: async (values) => {
+            addToCart(values.amount, price);
+            formik.setFieldValue("amount", '')
+        }
+    })
+
     return (
         <Card sx={{ width: '14%', height: '40%', margin: '1%' }}>
             <CardMedia
                 component="img"
                 height="50%"
-                image={image}
+                image={imageURL}
             />
             <CardContent style={{ display: 'flex', flexDirection: 'row', height: '20%', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -51,7 +72,7 @@ export default function ProductCard({ image = '../../assets/portada.png',id , na
                     <span>{stock}KG</span>
                 </div>
 
-                <IconButton onClick={() => {addToCart(inputValue, price)}}>
+                <IconButton onClick={formik.handleSubmit}>
                     <AddShoppingCartOutlinedIcon />
                 </IconButton>
             </CardContent>
@@ -62,7 +83,7 @@ export default function ProductCard({ image = '../../assets/portada.png',id , na
                         <span>{price}</span>
                     </IconButton>
                     <div style={{ display: 'flex', flexGrow: 1, justifyContent: 'flex-end' }}>
-                        <input className='card-input' type='text' value={inputValue} onChange={handleInputChange} />
+                        <input className='card-input' type='text' value={inputValue} {...formik.getFieldProps("amount")} />
                         <span>KG</span>
                     </div>
                 </div>

@@ -145,6 +145,15 @@ export default function DocumentsView({ contractId }) {
                         <span style={{ display: 'flex', maxWidth: '20%' }}>{documento.name}</span>
                     </div>
                 ))}
+                    <div style={{ display: 'flex', width: '40%', justifyContent: 'center', alignItems: 'center' }}>
+                        <IconButton
+                            onClick={() => {console.log('')}}
+                            sx={{ '&:hover': { backgroundColor: 'transparent' } }}
+                            style={{ display: 'flex', flexDirection: 'row', fontFamily: 'Nico Moji' }}>
+                            <DescriptionOutlinedIcon style={{ fontSize: '10vh', color: '#000' }} />
+                        </IconButton>
+                        <span style={{ display: 'flex', maxWidth: '20%' }}>Contrato</span>
+                    </div>
             </div>
         </>
     );

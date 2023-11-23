@@ -1,7 +1,7 @@
 import * as React from 'react';
 import ProductCard from "../utils/card";
 import { Context } from "../context/provider";
-import { createProduct, getProducts } from "../../actions/products";
+import { createProduct, getProductImage, getProducts } from "../../actions/products";
 import StorageCard from "../utils/storageCard";
 import IconButton from '@mui/material/IconButton';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
@@ -123,6 +123,10 @@ export default function Products() {
                 <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
                   <span>Cantidad: </span>
                   <input className='card-input' style={{ width: '50%' }} {...formik.getFieldProps("stock")} />
+                </div>
+                <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
+                  <span>Imagen: </span>
+                  <input type="file" accept="image/*" className='card-input' style={{ width: '50%', alignContent: 'center', alignItems: 'center' }} />
                 </div>
                 <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
                   <span>Precio: </span>

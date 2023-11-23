@@ -86,9 +86,7 @@ export default function ContractsView() {
     React.useEffect(() => {
         (async () => {
             let response = await getContracts(api);
-            if (response?.sucess) {
                 setContracts(response.result.contracts);
-            }
         })();
     }, [api, loading])
 
@@ -139,11 +137,9 @@ export default function ContractsView() {
                 <IconButton  onClick={handleOpen}>
                     <AddOutlinedIcon style={{ fontSize: '20vh', color: '#000' }} />
                 </IconButton>
-                {contracts.map((contrato) => (
-                    <div key={contrato.id}>
-                        <div key={contrato.id} onClick={() => {if(contrato.active){
-                            setView('document/')
-                        }}} style={{
+                {contracts.map(contrato => (
+                        <div key={contrato.id} onClick={() => {
+                            setView('document/'+contrato.id)}} style={{
                             display: 'flex', width: '13%', height: '35%', margin: '1%',
                             borderRadius: 8, flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center',
                             boxShadow: '0px 4px 8px 0px rgba(0,0,0,0.2)', cursor: contrato.active ? 'pointer' : 'default' 
@@ -174,7 +170,6 @@ export default function ContractsView() {
 
                             }
                         </div>
-                    </div>
 
                 ))}
             </div>

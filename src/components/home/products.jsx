@@ -23,15 +23,12 @@ export default function Products() {
 
   const handleButtonClick = () => {
     if (fileInput.current !== null) {
-      console.log('sadasd')
       fileInput.current.click();
-      console.log('You selected ');
     }
   };
 
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
-    console.log('You selected ' + file.name);
   };
 
   const handleOpen = () => {

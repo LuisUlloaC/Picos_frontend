@@ -132,6 +132,13 @@ export default function NavBar() {
                                             </Badge>
                                         </IconButton> : null
                                     }
+                                    {state.view.startsWith('issues/') ?
+                                        <IconButton size="large" color="primary" onClick={((e) => setView('document/'+state.view.split('/')[1]))}>
+                                            <Badge color="error">
+                                                <ArrowBackIosIcon />
+                                            </Badge>
+                                        </IconButton> : null
+                                    }
                                 </div>
                                 <IconButton size="large" color="primary" onClick={((e) => setView('home'))}>
                                     <Badge color="error">

@@ -25,15 +25,12 @@ export default function StorageCard({ image = '', name = 'product', price = '0',
 
     const handleButtonClick = () => {
         if (fileInput.current !== null) {
-            console.log('sadasd')
             fileInput.current.click();
-            console.log('You selected ');
         }
     };
 
     const handleFileChange = (event) => {
         setFile(event.target.files[0]);
-        console.log('You selected ' + file.name);
     };
 
     const handleOpen = () => {

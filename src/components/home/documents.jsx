@@ -138,7 +138,8 @@ export default function DocumentsView({contractId}) {
                 display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center',
                 width: '80%', height: '80%'
             }}>
-                {documents?.map((documento) => (
+                {documents?.map((documento) => 
+                documento.id === '3' ? <></> : 
                     <div key={documento.id} style={{ display: 'flex', width: '40%', justifyContent: 'center', alignItems: 'center' }}>
                         <IconButton
                             onClick={() => {
@@ -151,11 +152,10 @@ export default function DocumentsView({contractId}) {
                         </IconButton>
                         <span style={{ display: 'flex', maxWidth: '20%' }}>{documento.name}</span>
                     </div>
-                ))}
+                    )}
                 <div style={{ display: 'flex', width: '40%', justifyContent: 'center', alignItems: 'center' }}>
                     <IconButton
-                        onClick={() => { setView('issues/'+contractId)
-                    console.log('pepo') }}
+                        onClick={() => { setView('issues/'+contractId)}}
                         sx={{ '&:hover': { backgroundColor: 'transparent' } }}
                         style={{ display: 'flex', flexDirection: 'row', fontFamily: 'Nico Moji' }}>
                         <DescriptionOutlinedIcon style={{ fontSize: '10vh', color: '#000' }} />

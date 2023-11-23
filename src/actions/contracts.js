@@ -21,6 +21,7 @@ export const getContracts = async (api) => {
     })
 }
 
+
 export const getContractInfo = async (api, contract_id) => {
     let sucess = false;
     let response = null;

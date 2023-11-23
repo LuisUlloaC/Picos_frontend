@@ -37,7 +37,7 @@ export default function LoginScreen() {
       setState(response.state_data);
       navigate("/home");
     } else {
-      console.log(true);
+      navigate("/");
     }
     })()
 

@@ -134,8 +134,11 @@ export default function ContractsView() {
                             account_number: "",
                         }}
                         validationSchema={validationSchema}
-                        onSubmit={values => {
-                            console.log(values)
+                        onSubmit={async values => {
+                            await createNewContractIssue(api, values.template_id,
+                                values.bank_office, values.bank_location, values.bank_name, values.account_number
+                            );
+                            setLoading(true)
                             handleClose()
                         }}
 
@@ -158,7 +161,7 @@ export default function ContractsView() {
                                 <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
                                     <span>Número de cuenta: </span>
                                     <Field className='card-input' name="account_number" />
-                                    {errors.account_number && touched.account_number && <ErrorAlert errorBody={errors.account_number} />}
+                                   {errors.account_number && touched.account_number && <ErrorAlert errorBody={errors.account_number} />}
                                 </div>
                                 <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
                                     <span>Nombre del banco: </span>

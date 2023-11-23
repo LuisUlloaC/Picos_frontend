@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { Context } from "../context/provider";
 import LogoUserLogin from "../../assets/logo-userLogin";
 import { userLogin } from '../../actions/auth';
-import ErrorAlert from "../utils/errorAlert";
 
 export default function LoginScreen() {
   let navigate = useNavigate();

@@ -6,15 +6,19 @@ import { getTemplates } from "../../actions/templates";
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { useFormik } from "formik";
+import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
+import ErrorAlert from "../utils/errorAlert";
 import { createContractIssue } from "../../actions/contracts";
 
 
-export default function DocumentsView({contractId}) {
-    const { api, state, setState } = React.useContext(Context);
+export default function DocumentsView({ contractId }) {
+    const { api, setState } = React.useContext(Context);
     const [documents, setDocuments] = React.useState();
     const [open, setOpen] = React.useState(false);
+    const [loading, setLoading] = React.useState(false);
+    const [templateId, setTemplateId] = React.useState();
+
     const handleOpen = () => {
         setOpen(true);
     };
@@ -52,34 +56,12 @@ export default function DocumentsView({contractId}) {
 
     };
 
-    const formik = useFormik({
-        initialValues: {
-            contract_id: contractId,
-            template_id: "",
-            bank_office: "",
-            bank_location: "",
-            bank_name: "",
-            account_number: "",
-        },
-        validationSchema: Yup.object({
-            contract_id: Yup.string(),
-            template_id: Yup.string(),
-            bank_office: Yup.string(),
-            bank_location: Yup.string(),
-            bank_name: Yup.string(),
-            account_number: Yup.string(),
-        }),
-        onSubmit: async (values) => {
-            await createContractIssue(api, values.contract_id, values.template_id,
-                values.bank_office, values.bank_location, values.bank_name, values.account_number
-            );
-            formik.setFieldValue("bank_office", '')
-            formik.setFieldValue("bank_location", '')
-            formik.setFieldValue("bank_name", '')
-            formik.setFieldValue("account_number", '')
-        }
-    })
-
+    const validationSchema = Yup.object().shape({
+        bank_office: Yup.string().required('Oficina bancaria requerido').test('no-digits', 'Oficina bancaria solo se admiten letras', value => !/\d/.test(value)),
+        bank_location: Yup.string().required('Ubicación del banco').test('no-digits', 'Ubicacion del banco solo se admiten letras', value => !/\d/.test(value)),
+        bank_name: Yup.string().required('Nombre del banco requerido').test('no-digits', 'Nombre del banco solo admite letras', value => !/\d/.test(value)),
+        account_number: Yup.string().required('Número de cuenta requerido').matches(/^[0-9]+$/, 'Número de cuenta solo admite números'),
+    });
 
     React.useEffect(() => {
 
@@ -89,7 +71,7 @@ export default function DocumentsView({contractId}) {
                 setDocuments(response.result);
             }
         })();
-    }, [api])
+    }, [api, loading])
 
     return (
         <>
@@ -98,37 +80,73 @@ export default function DocumentsView({contractId}) {
                 onClose={handleClose}
             >
                 <Box sx={{ ...style }}>
-                    <h2 id="child-modal-title">Agregar a contrato</h2>
-                    <div style={{
-                        display: 'flex', width: '80%', height: '100%',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'space-evenly'
-                    }}>
-                        <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
-                            <span>Número de cuenta: </span>
-                            <input className='card-input' style={{ width: '100%' }} {...formik.getFieldProps("account_number")} />
-                        </div>
-                        <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
-                            <span>Nombre del banco: </span>
-                            <input className='card-input' style={{ width: '100%' }} {...formik.getFieldProps("bank_name")} />
-                        </div>
-                        <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
-                            <span>Oficina bancaria: </span>
-                            <input className='card-input' style={{ width: '100%', marginRight: '5%' }} {...formik.getFieldProps("bank_office")} />
-                        </div>
-                        <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
-                            <span>Ubicación del banco: </span>
-                            <input className='card-input' style={{ width: '100%', marginRight: '5%' }} {...formik.getFieldProps("bank_location")} />
-                        </div>
-                    </div>
-                    <IconButton style={{ display: 'flex' }} onClick={() => {
+                    <h2 id="child-modal-title">Agregar contrato</h2>
+                    <Formik
+                        initialValues={{
+                            contract_id: contractId,
+                            template_id: templateId,
+                            bank_office: "",
+                            bank_location: "",
+                            bank_name: "",
+                            account_number: "",
+                        }}
+                        validationSchema={validationSchema}
+                        onSubmit={async values => {
+                            await createContractIssue(api, values.contract_id, values.template_id,
+                                values.bank_office, values.bank_location, values.bank_name, values.account_number
+                            );
+                            setLoading(true);
+                            handleClose();
+                        }}
 
-                        formik.handleSubmit()
-                        handleClose()
-                    }}>
-                        <ArrowForwardIosIcon />
-                    </IconButton>
+                        style={{
+                            display: 'flex', width: '80%', height: '100%',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'space-evenly'
+                        }}
+
+                    >
+                        {({ errors, touched }) => (
+                            <Form style={{
+                                display: 'flex', width: '80%', height: '100%',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                justifyContent: 'space-evenly'
+                            }}>
+                                <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
+                                    <span>Número de cuenta: </span>
+                                    <Field className='card-input' name="account_number" />
+                                    {errors.account_number && touched.account_number && <ErrorAlert errorBody={errors.account_number} />}
+                                </div>
+                                <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
+                                    <span>Nombre del banco: </span>
+                                    <Field className='card-input' style={{
+                                        border: 'none', outline: 'none',
+                                        borderRadius: 8, width: '40%', textAlign: 'center'
+                                    }} name="bank_name" as="select">
+                                        <option className='options' value="">Select...</option>
+                                        <option className='options' value="BPA">BPA</option>
+                                        <option className='options' value="BANDEC">BANDEC</option>
+                                    </Field>
+                                    {errors.bank_name && touched.bank_name && <ErrorAlert errorBody={errors.bank_name} />}
+                                </div>
+                                <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
+                                    <span>Oficina bancaria: </span>
+                                    <Field className='card-input' name="bank_office" />
+                                    {errors.bank_office && touched.bank_office && <ErrorAlert errorBody={errors.bank_office} />}
+                                </div>
+                                <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
+                                    <span>Ubicación del banco: </span>
+                                    <Field className='card-input' name="bank_location" />
+                                    {errors.bank_location && touched.bank_location && <ErrorAlert errorBody={errors.bank_location} />}
+                                </div>
+                                <IconButton type="submit" style={{ display: 'flex' }}>
+                                    <ArrowForwardIosIcon />
+                                </IconButton>
+                            </Form>
+                        )}
+                    </Formik>
                 </Box>
             </Modal>
 
@@ -138,24 +156,24 @@ export default function DocumentsView({contractId}) {
                 display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center',
                 width: '80%', height: '80%'
             }}>
-                {documents?.map((documento) => 
-                documento.id === '3' ? <></> : 
-                    <div key={documento.id} style={{ display: 'flex', width: '40%', justifyContent: 'center', alignItems: 'center' }}>
-                        <IconButton
-                            onClick={() => {
-                                handleOpen();
-                                formik.setFieldValue("template_id", documento.id);
-                            }}
-                            sx={{ '&:hover': { backgroundColor: 'transparent' } }}
-                            style={{ display: 'flex', flexDirection: 'row', fontFamily: 'Nico Moji' }}>
-                            <DescriptionOutlinedIcon style={{ fontSize: '10vh', color: '#000' }} />
-                        </IconButton>
-                        <span style={{ display: 'flex', maxWidth: '20%' }}>{documento.name}</span>
-                    </div>
-                    )}
+                {documents?.map((documento) =>
+                    documento.id === '3' ? <></> :
+                        <div key={documento.id} style={{ display: 'flex', width: '40%', justifyContent: 'center', alignItems: 'center' }}>
+                            <IconButton
+                                onClick={() => {
+                                    handleOpen();
+                                    setTemplateId(documento.id);
+                                }}
+                                sx={{ '&:hover': { backgroundColor: 'transparent' } }}
+                                style={{ display: 'flex', flexDirection: 'row', fontFamily: 'Nico Moji' }}>
+                                <DescriptionOutlinedIcon style={{ fontSize: '10vh', color: '#000' }} />
+                            </IconButton>
+                            <span style={{ display: 'flex', maxWidth: '20%' }}>{documento.name}</span>
+                        </div>
+                )}
                 <div style={{ display: 'flex', width: '40%', justifyContent: 'center', alignItems: 'center' }}>
                     <IconButton
-                        onClick={() => { setView('issues/'+contractId)}}
+                        onClick={() => { setView('issues/' + contractId) }}
                         sx={{ '&:hover': { backgroundColor: 'transparent' } }}
                         style={{ display: 'flex', flexDirection: 'row', fontFamily: 'Nico Moji' }}>
                         <DescriptionOutlinedIcon style={{ fontSize: '10vh', color: '#000' }} />

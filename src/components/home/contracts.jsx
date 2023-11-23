@@ -9,7 +9,7 @@ import ContratoBg from '../../assets/contratoBg.png';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { useFormikContext, Formik, Form, Field } from "formik";
+import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import ErrorAlert from "../utils/errorAlert";
 
@@ -19,7 +19,6 @@ export default function ContractsView() {
     const [contracts, setContracts] = React.useState([]);
     const [loading, setLoading] = React.useState(false);
     const [open, setOpen] = React.useState(false);
-    const [validForm, setValidForm] = React.useState(true);
 
     const handleOpen = () => {
         setOpen(true);
@@ -50,54 +49,12 @@ export default function ContractsView() {
         alignItems: 'center'
 
     };
-    /*
-        const formik = useFormik({
-            initialValues: {
-                template_id: "3",
-                bank_office: "",
-                bank_location: "",
-                bank_name: "",
-                account_number: "",
-            },
-            validationSchema: Yup.object().shape({
-                template_id: Yup.string().matches(/^[^\d]*$/, 'Solo se admiten letras'),
-                bank_office: Yup.string().matches(/^[^\d]*$/, 'Solo se admiten letras'),
-                bank_location: Yup.string().matches(/^[^\d]*$/, 'Solo se admiten letras'),
-                bank_name: Yup.string().matches(/^[^\d]*$/, 'Solo se admiten letras'),
-                account_number: Yup.string().matches(/^[0-9]+$/, 'Solo se admiten números'),
-            }),
-            onSubmit: async (values, { resetForm }) => {
-    
-                if (await validateForm()) {
-                    await createNewContractIssue(api, values.template_id,
-                        values.bank_office, values.bank_location, values.bank_name, values.account_number
-                    );
-                    formik.setFieldValue("bank_office", '')
-                    formik.setFieldValue("bank_location", '')
-                    formik.setFieldValue("bank_name", '')
-                    formik.setFieldValue("account_number", '')
-                    setLoading(true)
-                } else {
-                    <ErrorAlert errorTitle="Error" errorBody="test" />
-                }
-            },
-        })
-    
-        const validateForm = async () => {
-            try {
-                await formik.validateForm();
-                return true;
-            } catch (error) {
-                return false;
-            }
-        };
-        */
 
     const validationSchema = Yup.object().shape({
-        bank_office: Yup.string().test('no-digits', 'Solo se admiten letras', value => !/\d/.test(value)),
-        bank_location: Yup.string().test('no-digits', 'Solo se admiten letras', value => !/\d/.test(value)),
-        bank_name: Yup.string().test('no-digits', 'Solo se admiten letras', value => !/\d/.test(value)),
-        account_number: Yup.string().matches(/^[0-9]+$/, 'Solo se admiten números'),
+        bank_office: Yup.string().required('Oficina bancaria requerido').test('no-digits', 'Oficina bancaria solo se admiten letras', value => !/\d/.test(value)),
+        bank_location: Yup.string().required('Ubicación del banco').test('no-digits', 'Ubicacion del banco solo se admiten letras', value => !/\d/.test(value)),
+        bank_name: Yup.string().required('Nombre del banco requerido').test('no-digits', 'Nombre del banco solo admite letras', value => !/\d/.test(value)),
+        account_number: Yup.string().required('Número de cuenta requerido').matches(/^[0-9]+$/, 'Número de cuenta solo admite números'),
     });
 
 
@@ -150,7 +107,6 @@ export default function ContractsView() {
                         }}
 
                     >
-
                         {({ errors, touched }) => (
                             <Form style={{
                                 display: 'flex', width: '80%', height: '100%',
@@ -165,7 +121,7 @@ export default function ContractsView() {
                                 </div>
                                 <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
                                     <span>Nombre del banco: </span>
-                                    <Field className='dropdown' style={{border: 'none', outline: 'none', 
+                                    <Field className='card-input' style={{border: 'none', outline: 'none', 
                                     borderRadius: 8,width: '40%', textAlign: 'center'}} name="bank_name" as="select">
                                         <option className='options' value="">Select...</option>
                                         <option className='options' value="BPA">BPA</option>

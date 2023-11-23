@@ -39,8 +39,6 @@ body {
   position: absolute;
   margin-bottom: 4vh;
   bottom: 0;
-  left: 50;
-  right: 50;
 }
 
 .spaced-word {
@@ -54,7 +52,6 @@ body {
   position: absolute;
   top: 10%;
   left: 10%;
-  right: 1;
   margin-right: 10vh;
 }
 
@@ -64,7 +61,6 @@ body {
   position: absolute;
   margin-top: 5vh;
   top: 0;
-  left: 1;
   right: 0;
   margin-right: 10vh;
 }
@@ -87,7 +83,6 @@ body {
   position: absolute;
   top: 36%;
   left: 25%;
-  right: 1;
   overflow-y: scroll;
   justify-content: center;
   -ms-overflow-style: none;

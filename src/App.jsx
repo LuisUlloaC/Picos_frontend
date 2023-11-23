@@ -6,6 +6,7 @@ import About from "./components/session/aboutScreen";
 import { CustomProvider } from "./components/context/provider";
 import LoginScreen from "./components/session/loginScreen";
 import HomeScreen from "./components/home/homeScreen";
+import CacheBuster from 'react-cache-buster';
 
 function App() {
   return (

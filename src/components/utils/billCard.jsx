@@ -77,19 +77,20 @@ export default function BillCard({ id, date, status }) {
 
 
 
-            <div onClick={() => {
-                handleOpen();
-            }} style={{
+            <div style={{
                 display: 'flex', width: '13%', height: '40%', marginLeft: '2%',
                 borderRadius: 8, flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center',
                 boxShadow: '0px 4px 8px 0px rgba(0,0,0,0.2)'
             }}>
-                <img src={Pdfbg} style={{ display: 'flex', height: '50%', width: '50%', padding: '1%' }} />
-                <div style={{ display: 'flex', flexWrap: 'wrap', height: '10%', width: '100%', justifyContent: 'space-evenly' }}>
-                    <span>Estado:</span> <span>{statusValue}</span>
+                <img onClick={() => {handleOpen();}}   src={Pdfbg} style={{ display: 'flex', minHeight: '50%', width: '50%', padding: '1%' }} />
+                <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '20%', width: '100%' }}>
+                    <span>{id}</span>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '30%', width: '100%' }}>
                     <span>Fecha:</span> <span>{date}</span>
+                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', height: '10%', width: '100%', justifyContent: 'space-evenly' }}>
+                    <span>Estado:</span> <span>{statusValue}</span>
                 </div>
                 {statusValue === 'abierto' ?
                     <div style={{ display: 'flex', justifyContent: 'space-evenly', width: '100%' }}>

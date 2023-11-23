@@ -138,15 +138,16 @@ export const checkoutOrder = async (api, items) => {
       sucess = false;
       response = res;
     });
-
-  let file = await getBillPDF(api, result.billing_id);
-  const link = document.createElement("a");
-  link.href = file.result;
-  link.setAttribute("download", "orden.pdf");
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  window.URL.revokeObjectURL(file.result);
+    if(sucess){
+      let file = await getBillPDF(api, result.billing_id);
+      const link = document.createElement("a");
+      link.href = file.result;
+      link.setAttribute("download", "orden.pdf");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(file.result);
+    }
 
   return {
     sucess: sucess,

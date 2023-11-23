@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import Modal from '@mui/material/Modal';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { checkoutOrder } from '../../actions/bills';
+import ErrorAlert from './errorAlert';
 
 
 
@@ -108,8 +109,12 @@ export default function NavBar() {
 
                     </div>
                     <IconButton style={{ display: 'flex' }} onClick={() => {
-                        handleClose();
-                        checkoutOrder(api, state.cart)
+                        if(checkoutOrder(api, state.cart).sucess){
+                            handleClose();
+                        }else{
+                            console.log('pepo')
+                            alert('No disponible')
+                        }
                     }}>
                         <ArrowForwardIosIcon />
                     </IconButton>

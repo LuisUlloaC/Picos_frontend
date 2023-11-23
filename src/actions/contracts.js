@@ -80,7 +80,6 @@ export const createNewContractIssue = async (api, template_id,
     let sucess = false;
     let response = null;
     let result = null;
-        console.log('DENTROOOOOOOOOOOOOOOOOOO')
     await api.post("/issues/", { template_id, form_data:{
         bank_office: bank_office, 
         bank_location: bank_location, 

@@ -11,8 +11,9 @@ import AttachMoneyOutlinedIcon from '@mui/icons-material/AttachMoneyOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { deleteProduct, deleteProductImage, editProduct, uploadProductImage } from '../../actions/products';
-import { useFormik } from "formik";
+import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
+import ErrorAlert from "../utils/errorAlert";
 import { getProductImage } from '../../actions/products';
 
 
@@ -48,27 +49,11 @@ export default function StorageCard({ image = '', name = 'product', price = '0',
         })()
     })
 
-    const formik = useFormik({
-        initialValues: {
-            id: id,
-            name: name,
-            price: price,
-            stock: stock,
-        },
-        validationSchema: Yup.object({
-            id: Yup.number(),
-            name: Yup.string(),
-            price: Yup.number(),
-            stock: Yup.string(),
-        }),
-        onSubmit: async (values) => {
-            let imageId = (await uploadProductImage(api, file)).result;
-            await editProduct(api, id, values.name, values.stock, values.price, imageId);
-            await deleteProductImage(api, image);
-            setLoading(true)
-            handleClose()
-        }
-    })
+    const validationSchema = Yup.object().shape({
+        name: Yup.string().required('Nombre requerido'),
+        price: Yup.string().required('Precio requerido').matches(/^[0-9]+$/, 'Precio solo admite números'),
+        stock: Yup.string().required('Cantidad requerida').matches(/^[0-9]+$/, 'Cantidad solo admite números'),
+    });
 
     const style = {
         display: 'flex',
@@ -100,43 +85,71 @@ export default function StorageCard({ image = '', name = 'product', price = '0',
                 onClose={handleClose}
             >
                 <Box sx={{ ...style }}>
-                    <h2 id="child-modal-title">Agregar producto</h2>
-                    <div style={{
-                        display: 'flex', width: '80%', height: '100%',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'space-evenly'
-                    }}>
-                        <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
-                            <span>Nombre: </span>
-                            <input className='card-input' style={{ width: '50%' }} {...formik.getFieldProps("name")} />
-                        </div>
-                        <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
-                            <span>Cantidad: </span>
-                            <input className='card-input' style={{ width: '50%' }} {...formik.getFieldProps("stock")} />
-                        </div>
-                        <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
-                            <span>Imagen: </span>
-                            <button className='card-input' onClick={() => { handleButtonClick() }}
-                                style={{ width: '50%', alignContent: 'center', alignItems: 'center', backgroundColor: 'transparent' }}>
-                                Seleccionar...
-                            </button>
-                            <input type="file" ref={fileInput} onChange={handleFileChange} style={{ display: 'none' }} />
-                        </div>
-                        <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
-                            <span>Precio: </span>
-                            <div style={{ display: 'flex', width: '56%', justifyContent: 'space-between' }} >
-                                <input className='card-input' style={{ width: '100%', marginRight: '5%' }} {...formik.getFieldProps("price")} />
-                                <AttachMoneyOutlinedIcon />
-                            </div>
-                        </div>
-                    </div>
-                    <IconButton style={{ display: 'flex' }} onClick={() => {
-                        formik.handleSubmit()
-                        handleClose()
-                    }}>
-                        <ArrowForwardIosIcon />
-                    </IconButton>
+                    <h2 id="child-modal-title">Editar producto</h2>
+                    <Formik
+                        initialValues={{
+                            id: id,
+                            name: name,
+                            price: price,
+                            stock: stock,
+                        }}
+                        validationSchema={validationSchema}
+                        onSubmit={async values => {
+                            let imageId = (await uploadProductImage(api, file)).result;
+                            await editProduct(api, id, values.name, values.stock, values.price, imageId);
+                            await deleteProductImage(api, image);
+                            setLoading(true)
+                            handleClose()
+                        }}
+
+                        style={{
+                            display: 'flex', width: '80%', height: '100%',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'space-evenly'
+                        }}
+
+                    >
+                        {({ errors, touched }) => (
+                            <Form style={{
+                                display: 'flex', width: '80%', height: '100%',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                justifyContent: 'space-evenly'
+                            }}>
+                                <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
+                                    <span>Nombre: </span>
+                                    <Field className='card-input' name="name" />
+                                    {errors.name && touched.name && <ErrorAlert errorBody={errors.name} />}
+                                </div>
+                                <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
+                                    <span>Imagen: </span>
+                                    <button className='card-input' onClick={() => { handleButtonClick() }}
+                                        style={{ width: '45%', alignContent: 'center', alignItems: 'center', backgroundColor: 'transparent' }}>
+                                        Seleccionar...
+                                    </button>
+                                    <input type="file" ref={fileInput} onChange={handleFileChange} style={{ display: 'none' }} />
+
+                                </div>
+                                <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
+                                    <span>Cantidad: </span>
+                                    <Field className='card-input' name="stock" />
+                                    {errors.stock && touched.stock && <ErrorAlert errorBody={errors.stock} />}
+                                </div>
+                                <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
+                                    <span>Precio: </span>
+                                    <div style={{ display: 'flex', width: '100%', justifyContent: 'flex-end' }}>
+                                        <Field className='card-input' name="price" />
+                                        <AttachMoneyOutlinedIcon />
+                                        {errors.price && touched.price && <ErrorAlert errorBody={errors.price} />}
+                                    </div>
+                                </div>
+                                <IconButton type="submit" style={{ display: 'flex' }}>
+                                    <ArrowForwardIosIcon />
+                                </IconButton>
+                            </Form>
+                        )}
+                    </Formik>
                 </Box>
             </Modal>
 

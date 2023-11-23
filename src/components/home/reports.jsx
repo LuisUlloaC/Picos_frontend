@@ -43,9 +43,9 @@ export default function IssuesView({contractId}) {
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        minWidth: '40%',
-        maxWidth: '40%',
-        height: '60%',
+        minWidth: '25%',
+        maxWidth: '25%',
+        height: '25%',
         bgcolor: 'background.paper',
         boxShadow: 24,
         borderRadius: 2,
@@ -78,7 +78,7 @@ export default function IssuesView({contractId}) {
                     <h2 id="child-modal-title">Obteniendo archivo...</h2>
                     {loading ? null :
                         <>
-                        <IconButton href={pfdUrl} download='issue.pdf' style={{ display: 'flex' }} sx={{ height: '50%', width: '18%' }} >
+                        <IconButton href={pfdUrl} download='issue.pdf' style={{ display: 'flex' }} sx={{ height: '50%', width: '25%' }} >
                             <SimCardDownloadIcon sx={{ height: '100%', width: '100%' }} />
                         </IconButton>
                         </>

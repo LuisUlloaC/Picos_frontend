@@ -68,7 +68,7 @@ export default function BillCard({ id, date, status }) {
                 <Box sx={{ ...style }}>
                     <h2 id="child-modal-title">Obteniendo archivo...</h2>
                     {loading ? null :
-                        <IconButton style={{ display: 'flex' }} sx={{ height: '50%', width: '18%' }} onClick={() => { window.open(pfdUrl) }}>
+                        <IconButton href={pfdUrl} download={'resumen '+ date +'.pdf'} style={{ display: 'flex' }} sx={{ height: '50%', width: '18%' }} >
                             <SimCardDownloadIcon sx={{ height: '100%', width: '100%' }} />
                         </IconButton>
                     }

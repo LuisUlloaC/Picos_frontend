@@ -11,8 +11,8 @@ import * as Yup from "yup";
 import { createContractIssue } from "../../actions/contracts";
 
 
-export default function DocumentsView({ contractId }) {
-    const { api } = React.useContext(Context);
+export default function DocumentsView({contractId}) {
+    const { api, state, setState } = React.useContext(Context);
     const [documents, setDocuments] = React.useState();
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => {
@@ -21,6 +21,13 @@ export default function DocumentsView({ contractId }) {
     const handleClose = () => {
         setOpen(false);
     };
+
+    const setView = (view) => {
+        setState(oldState => ({
+            ...oldState,
+            view: view
+        }));
+    }
 
 
     const style = {
@@ -63,12 +70,13 @@ export default function DocumentsView({ contractId }) {
             account_number: Yup.string(),
         }),
         onSubmit: async (values) => {
-            console.log({contract_id: values.contract_id, template_id: values.template_id, form_data:{
-                bank_office: values.bank_office, bank_location: values.bank_location, bank_name: values.bank_name, account_number:values.account_number
-            }});
             await createContractIssue(api, values.contract_id, values.template_id,
                 values.bank_office, values.bank_location, values.bank_name, values.account_number
             );
+            formik.setFieldValue("bank_office", '')
+            formik.setFieldValue("bank_location", '')
+            formik.setFieldValue("bank_name", '')
+            formik.setFieldValue("account_number", '')
         }
     })
 
@@ -90,7 +98,7 @@ export default function DocumentsView({ contractId }) {
                 onClose={handleClose}
             >
                 <Box sx={{ ...style }}>
-                    <h2 id="child-modal-title">Agregar producto</h2>
+                    <h2 id="child-modal-title">Agregar a contrato</h2>
                     <div style={{
                         display: 'flex', width: '80%', height: '100%',
                         flexDirection: 'column',
@@ -115,7 +123,7 @@ export default function DocumentsView({ contractId }) {
                         </div>
                     </div>
                     <IconButton style={{ display: 'flex' }} onClick={() => {
-                        
+
                         formik.handleSubmit()
                         handleClose()
                     }}>
@@ -136,7 +144,6 @@ export default function DocumentsView({ contractId }) {
                             onClick={() => {
                                 handleOpen();
                                 formik.setFieldValue("template_id", documento.id);
-                                console.log('Template ID:', documento.id);
                             }}
                             sx={{ '&:hover': { backgroundColor: 'transparent' } }}
                             style={{ display: 'flex', flexDirection: 'row', fontFamily: 'Nico Moji' }}>
@@ -145,15 +152,16 @@ export default function DocumentsView({ contractId }) {
                         <span style={{ display: 'flex', maxWidth: '20%' }}>{documento.name}</span>
                     </div>
                 ))}
-                    <div style={{ display: 'flex', width: '40%', justifyContent: 'center', alignItems: 'center' }}>
-                        <IconButton
-                            onClick={() => {console.log('')}}
-                            sx={{ '&:hover': { backgroundColor: 'transparent' } }}
-                            style={{ display: 'flex', flexDirection: 'row', fontFamily: 'Nico Moji' }}>
-                            <DescriptionOutlinedIcon style={{ fontSize: '10vh', color: '#000' }} />
-                        </IconButton>
-                        <span style={{ display: 'flex', maxWidth: '20%' }}>Contrato</span>
-                    </div>
+                <div style={{ display: 'flex', width: '40%', justifyContent: 'center', alignItems: 'center' }}>
+                    <IconButton
+                        onClick={() => { setView('issues/'+contractId)
+                    console.log('pepo') }}
+                        sx={{ '&:hover': { backgroundColor: 'transparent' } }}
+                        style={{ display: 'flex', flexDirection: 'row', fontFamily: 'Nico Moji' }}>
+                        <DescriptionOutlinedIcon style={{ fontSize: '10vh', color: '#000' }} />
+                    </IconButton>
+                    <span style={{ display: 'flex', maxWidth: '20%' }}>Contrato</span>
+                </div>
             </div>
         </>
     );

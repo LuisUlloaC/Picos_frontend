@@ -109,7 +109,6 @@ export default function NavBar() {
                     </div>
                     <IconButton style={{ display: 'flex' }} onClick={() => {
                         handleClose();
-                        console.log(state.cart)
                         checkoutOrder(api, state.cart)
                     }}>
                         <ArrowForwardIosIcon />

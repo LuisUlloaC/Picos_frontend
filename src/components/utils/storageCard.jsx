@@ -10,16 +10,32 @@ import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
 import AttachMoneyOutlinedIcon from '@mui/icons-material/AttachMoneyOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { deleteProduct, editProduct } from '../../actions/products';
+import { deleteProduct, deleteProductImage, editProduct, uploadProductImage } from '../../actions/products';
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { getProductImage } from '../../actions/products';
 
 
 
-export default function StorageCard({ image = '', name = 'product', price = '0', stock = '0', api, id=0 }) {
+export default function StorageCard({ image = '', name = 'product', price = '0', stock = '0', api, id = 0, setLoading }) {
     const [open, setOpen] = React.useState(false);
     const [imageURL, setImageURL] = React.useState('../../assets/portada.png');
+    const fileInput = React.useRef(null);
+    const [file, setFile] = React.useState(false);
+
+    const handleButtonClick = () => {
+        if (fileInput.current !== null) {
+            console.log('sadasd')
+            fileInput.current.click();
+            console.log('You selected ');
+        }
+    };
+
+    const handleFileChange = (event) => {
+        setFile(event.target.files[0]);
+        console.log('You selected ' + file.name);
+    };
+
     const handleOpen = () => {
         setOpen(true);
     };
@@ -27,14 +43,13 @@ export default function StorageCard({ image = '', name = 'product', price = '0',
         setOpen(false);
     };
 
-    React.useEffect( () => {
-
-        (async() => {
+    React.useEffect(() => {
+        (async () => {
             let result = await getProductImage(api, image);
             setImageURL(result.result);
+            setLoading(false);
         })()
     })
-
 
     const formik = useFormik({
         initialValues: {
@@ -49,8 +64,11 @@ export default function StorageCard({ image = '', name = 'product', price = '0',
             price: Yup.number(),
             stock: Yup.string(),
         }),
-        onSubmit:async (values) => {
-            await editProduct(api, id, values.name, values.stock, values.price);
+        onSubmit: async (values) => {
+            let imageId = (await uploadProductImage(api, file)).result;
+            await editProduct(api, id, values.name, values.stock, values.price, imageId);
+            await deleteProductImage(api, image);
+            setLoading(true)
             handleClose()
         }
     })
@@ -85,10 +103,9 @@ export default function StorageCard({ image = '', name = 'product', price = '0',
                 onClose={handleClose}
             >
                 <Box sx={{ ...style }}>
-
-                    <h2 id="child-modal-title">Editar producto</h2>
-                    <form style={{
-                        display: 'flex', width: '80%', minHeight: '95%',
+                    <h2 id="child-modal-title">Agregar producto</h2>
+                    <div style={{
+                        display: 'flex', width: '80%', height: '100%',
                         flexDirection: 'column',
                         alignItems: 'center',
                         justifyContent: 'space-evenly'
@@ -96,25 +113,33 @@ export default function StorageCard({ image = '', name = 'product', price = '0',
                         <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
                             <span>Nombre: </span>
                             <input className='card-input' style={{ width: '50%' }} {...formik.getFieldProps("name")} />
-                            {formik.touched.name && formik.errors.name ? (
-                                <span>{formik.errors.name}</span>
-                            ) : null}
                         </div>
                         <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
                             <span>Cantidad: </span>
                             <input className='card-input' style={{ width: '50%' }} {...formik.getFieldProps("stock")} />
                         </div>
                         <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
+                            <span>Imagen: </span>
+                            <button className='card-input' onClick={() => { handleButtonClick() }}
+                                style={{ width: '50%', alignContent: 'center', alignItems: 'center', backgroundColor: 'transparent' }}>
+                                Seleccionar...
+                            </button>
+                            <input type="file" ref={fileInput} onChange={handleFileChange} style={{ display: 'none' }} />
+                        </div>
+                        <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
                             <span>Precio: </span>
-                            <div style={{ display: 'flex', width: '56%', justifyContent: 'space-between' }}>
+                            <div style={{ display: 'flex', width: '56%', justifyContent: 'space-between' }} >
                                 <input className='card-input' style={{ width: '100%', marginRight: '5%' }} {...formik.getFieldProps("price")} />
                                 <AttachMoneyOutlinedIcon />
                             </div>
                         </div>
-                        <IconButton style={{ display: 'flex' }} onClick={formik.handleSubmit}>
-                            <ArrowForwardIosIcon />
-                        </IconButton>
-                    </form>
+                    </div>
+                    <IconButton style={{ display: 'flex' }} onClick={() => {
+                        formik.handleSubmit()
+                        handleClose()
+                    }}>
+                        <ArrowForwardIosIcon />
+                    </IconButton>
                 </Box>
             </Modal>
 
@@ -129,7 +154,11 @@ export default function StorageCard({ image = '', name = 'product', price = '0',
                     <span>{stock}KG</span>
                 </CardContent>
                 <CardActions style={{ display: 'flex', direction: 'rtl', minHeight: '20%', alignItems: 'center' }}>
-                    <IconButton onClick={(async () => await deleteProduct(api, id))}>
+                    <IconButton onClick={(async () => {
+                        await deleteProduct(api, id);
+                        await deleteProductImage(api, image)
+                        setLoading(true)
+                    })}>
                         <DeleteOutlineOutlinedIcon />
                     </IconButton>
                     <IconButton onClick={handleOpen}>

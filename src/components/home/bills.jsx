@@ -96,17 +96,13 @@ export default function BillsView() {
                     <h2 id="child-modal-title">Obteniendo archivo...</h2>
                     {loading ? null :
                         <>
-                        <a href={pfdUrl} download>download</a>
-                        <IconButton style={{ display: 'flex' }} sx={{ height: '50%', width: '18%' }} onClick={() => { window.open(pfdUrl) }}>
+                        <IconButton href={pfdUrl} download={'resumen '+ String(currentMonth+1) +'-'+ currentYear+'.pdf'} style={{ display: 'flex' }} sx={{ height: '50%', width: '18%' }} >
                             <SimCardDownloadIcon sx={{ height: '100%', width: '100%' }} />
                         </IconButton>
                         </>
                     }
                 </Box>
             </Modal>
-
-
-
 
 
             <div className="title">Facturas</div>

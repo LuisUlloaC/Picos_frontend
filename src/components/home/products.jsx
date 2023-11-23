@@ -1,7 +1,7 @@
 import * as React from 'react';
 import ProductCard from "../utils/card";
 import { Context } from "../context/provider";
-import { createProduct, getProductImage, getProducts } from "../../actions/products";
+import { createProduct, getProductImage, getProducts, uploadProductImage } from "../../actions/products";
 import StorageCard from "../utils/storageCard";
 import IconButton from '@mui/material/IconButton';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
@@ -12,11 +12,28 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
+
 export default function Products() {
   const [loading, setLoading] = React.useState(true);
   const { state, api } = React.useContext(Context);
   const [products, setProducts] = React.useState([]);
   const [open, setOpen] = React.useState(false);
+  const fileInput = React.useRef(null);
+  const [file, setFile] = React.useState(false);
+
+  const handleButtonClick = () => {
+    if (fileInput.current !== null) {
+      console.log('sadasd')
+      fileInput.current.click();
+      console.log('You selected ');
+    }
+  };
+
+  const handleFileChange = (event) => {
+    setFile(event.target.files[0]);
+    console.log('You selected ' + file.name);
+  };
+
   const handleOpen = () => {
     setOpen(true);
   };
@@ -59,8 +76,13 @@ export default function Products() {
       stock: Yup.string(),
     }),
     onSubmit: async (values) => {
-      console.log(values);
-      await createProduct(api, values.name, values.stock, values.price)
+      let imageId = (await uploadProductImage(api, file)).result;
+      await createProduct(api, values.name, values.stock, values.price, imageId)
+      formik.setFieldValue("name", '')
+      formik.setFieldValue("price", '')
+      formik.setFieldValue("stock", '')
+      setFile(false)
+      setLoading(true)
     }
   })
 
@@ -74,7 +96,7 @@ export default function Products() {
         setLoading(false);
       }
     })();
-  }, [api]);
+  }, [api, loading]);
 
   return (
     <>
@@ -126,7 +148,11 @@ export default function Products() {
                 </div>
                 <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
                   <span>Imagen: </span>
-                  <input type="file" accept="image/*" className='card-input' style={{ width: '50%', alignContent: 'center', alignItems: 'center' }} />
+                  <button className='card-input' onClick={() => {handleButtonClick()}}
+                    style={{ width: '50%', alignContent: 'center', alignItems: 'center', backgroundColor: 'transparent' }}>
+                    Seleccionar...
+                  </button>
+                  <input type="file" ref={fileInput} onChange={handleFileChange} style={{ display: 'none' }} />
                 </div>
                 <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
                   <span>Precio: </span>
@@ -168,6 +194,7 @@ export default function Products() {
                         stock={product.stock}
                         api={api}
                         id={Number(product.id)}
+                        setLoading={setLoading}
                       />
                     );
                   })

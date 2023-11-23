@@ -11,6 +11,7 @@ import "./admin.css"
 import Products from "../home/products";
 
 import { Context } from "../context/provider";
+import IssuesView from "../home/reports";
 
 export default function AdminHome() {
     const { state, setState } = React.useContext(Context);
@@ -56,6 +57,7 @@ export default function AdminHome() {
             {state.view === 'storage' ? <Products/> : null}
             {state.view === 'bills' ? <BillsView/> : null}
             {state.view.startsWith('document/') ? <DocumentsView contractId={state.view.split('/')[1]} /> : null}
+            {state.view.startsWith('issues/') ? <IssuesView contractId={state.view.split('/')[1]}/> : null}
         
         
         </>

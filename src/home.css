@@ -1,110 +1,117 @@
 .home-container {
-    display: flex;
-    flex-direction: column;
-    width: 100vw;
-    height: 100vh;
-    max-width: 95vw;
-    max-height: 98vh;
-    align-items: center;
-  }
+        display: flex;
+        flex-direction: column;
+        width: 100vw;
+        height: 100vh;
+        max-width: 95vw;
+        max-height: 98vh;
+        align-items: center;
+}
 
 .home-container .home-header {
-    display: flex;
-    width: 100vw;
-    max-height: 2vh;
+        display: flex;
+        width: 100vw;
+        max-height: 2vh;
 }
 
 .home-container .title {
-    display: flex;
-    flex-wrap: wrap;
-    font-size: 3vw;
-    text-align: center;
-    max-width: 20vw;
-    color: #000;
-    margin-top: 1%;
+        display: flex;
+        flex-wrap: wrap;
+        font-size: 3vw;
+        text-align: center;
+        max-width: 20vw;
+        color: #000;
+        margin-top: 1%;
 }
 
 .home-container .list {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    scrollbar-width: none;
-    align-items: center;
-    justify-content: center;
-    width: 100vw;
-    max-width: 100vw;
-    height: 90%;
-    max-height: 100%;
-    padding: 1vh;
-    overflow-y: scroll;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        scrollbar-width: none;
+        align-items: center;
+        justify-content: center;
+        width: 100vw;
+        max-width: 100vw;
+        height: 90%;
+        max-height: 100%;
+        padding: 1vh;
+        overflow-y: scroll;
 }
 
 .home-container .list::-webkit-scrollbar {
-    display: none;
+        display: none;
 }
 
 .home-container .list::-webkit-scrollbar-thumb {
-    display: none;
+        display: none;
 }
 
 
 .card-input {
-    display: flex;
-    text-align: center;
-    font-family: 'Nico Moji';
-    width: 40%;
-    margin-left: 10%;
-    outline: none;
-    border: none;
-    border-bottom: 2px solid #b8b8b8;
+        display: flex;
+        text-align: center;
+        font-family: 'Nico Moji';
+        width: 40%;
+        margin-left: 10%;
+        outline: none;
+        border: none;
+        border-bottom: 2px solid #b8b8b8;
 }
 
 
 .heartbeat {
-    align-self: center;
-    align-items: center;
-	-webkit-animation: heartbeat 1.5s ease-in-out infinite both;
-	        animation: heartbeat 1.5s ease-in-out infinite both;
+        align-self: center;
+        align-items: center;
+        -webkit-animation: heartbeat 1.5s ease-in-out infinite both;
+        animation: heartbeat 1.5s ease-in-out infinite both;
 }
-  
 
 
- @-webkit-keyframes heartbeat {
-    from {
-      -webkit-transform: scale(1);
-              transform: scale(1);
-      -webkit-transform-origin: center center;
-              transform-origin: center center;
-      -webkit-animation-timing-function: ease-out;
-              animation-timing-function: ease-out;
-    }
-    10% {
-      -webkit-transform: scale(0.91);
-              transform: scale(0.91);
-      -webkit-animation-timing-function: ease-in;
-              animation-timing-function: ease-in;
-    }
-  }
-  @keyframes heartbeat {
-    from {
-      -webkit-transform: scale(1);
-              transform: scale(1);
-      -webkit-transform-origin: center center;
-              transform-origin: center center;
-      -webkit-animation-timing-function: ease-out;
-              animation-timing-function: ease-out;
-    }
-    10% {
-      -webkit-transform: scale(0.91);
-              transform: scale(0.91);
-      -webkit-animation-timing-function: ease-in;
-              animation-timing-function: ease-in;
-    }
-    45% {
-      -webkit-transform: scale(1);
-              transform: scale(1);
-      -webkit-animation-timing-function: ease-out;
-              animation-timing-function: ease-out;
-    }
-  }
-  
+input[type="file"] {
+        display: none;
+}
+
+
+@-webkit-keyframes heartbeat {
+        from {
+                -webkit-transform: scale(1);
+                transform: scale(1);
+                -webkit-transform-origin: center center;
+                transform-origin: center center;
+                -webkit-animation-timing-function: ease-out;
+                animation-timing-function: ease-out;
+        }
+
+        10% {
+                -webkit-transform: scale(0.91);
+                transform: scale(0.91);
+                -webkit-animation-timing-function: ease-in;
+                animation-timing-function: ease-in;
+        }
+}
+
+@keyframes heartbeat {
+        from {
+                -webkit-transform: scale(1);
+                transform: scale(1);
+                -webkit-transform-origin: center center;
+                transform-origin: center center;
+                -webkit-animation-timing-function: ease-out;
+                animation-timing-function: ease-out;
+        }
+
+        10% {
+                -webkit-transform: scale(0.91);
+                transform: scale(0.91);
+                -webkit-animation-timing-function: ease-in;
+                animation-timing-function: ease-in;
+        }
+
+        45% {
+                -webkit-transform: scale(1);
+                transform: scale(1);
+                -webkit-animation-timing-function: ease-out;
+                animation-timing-function: ease-out;
+        }
+}

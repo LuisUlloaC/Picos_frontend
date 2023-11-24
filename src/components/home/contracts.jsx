@@ -162,7 +162,10 @@ export default function ContractsView() {
                         borderRadius: 8, flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center',
                         boxShadow: '0px 4px 8px 0px rgba(0,0,0,0.2)', cursor: contrato.active ? 'pointer' : 'default'
                     }}>
-                        <img src={ContratoBg} alt='img' style={{ display: 'flex', height: '50%', width: '50%', padding: '1%', marginLeft: '10%' }} />
+                        <img src={ContratoBg} alt='img' style={{ display: 'flex', minHeight: '50%', width: '50%', padding: '1%', marginLeft: '10%' }} />
+                        <div style={{ display: 'flex', flexWrap: 'wrap', height: '25%', width: '100%', justifyContent: 'space-evenly', alignItems: 'center' }}>
+                            <span>{contrato.id}</span>
+                        </div>
                         <div style={{ display: 'flex', flexWrap: 'wrap', height: '10%', width: '100%', justifyContent: 'space-evenly' }}>
                             <span>Estado:</span> <span>{contrato.active ? 'activo' : 'cerrado'}</span>
                         </div>

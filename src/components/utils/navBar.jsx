@@ -18,7 +18,7 @@ import ErrorAlert from './errorAlert';
 
 
 
-export default function NavBar() {
+export default function NavBar({ day }) {
     const { state, setState, api } = React.useContext(Context)
     let navigate = useNavigate();
     const [open, setOpen] = React.useState(false);
@@ -49,12 +49,12 @@ export default function NavBar() {
 
     function removeItem(product_id) {
         setState(prevState => {
-          return {
-            ...prevState,
-            cart: prevState.cart.filter(item => item.product_id !== product_id)
-          };
+            return {
+                ...prevState,
+                cart: prevState.cart.filter(item => item.product_id !== product_id)
+            };
         });
-       }
+    }
 
     const style = {
         display: 'flex',
@@ -109,9 +109,9 @@ export default function NavBar() {
 
                     </div>
                     <IconButton style={{ display: 'flex' }} onClick={() => {
-                        if(checkoutOrder(api, state.cart).sucess){
+                        if (checkoutOrder(api, state.cart).sucess) {
                             handleClose();
-                        }else{
+                        } else {
                             console.log('pepo')
                             alert('No disponible')
                         }
@@ -138,7 +138,7 @@ export default function NavBar() {
                                         </IconButton> : null
                                     }
                                     {state.view.startsWith('issues/') ?
-                                        <IconButton size="large" color="primary" onClick={((e) => setView('document/'+state.view.split('/')[1]))}>
+                                        <IconButton size="large" color="primary" onClick={((e) => setView('document/' + state.view.split('/')[1]))}>
                                             <Badge color="error">
                                                 <ArrowBackIosIcon />
                                             </Badge>
@@ -154,11 +154,14 @@ export default function NavBar() {
                             :
                             <>
                                 <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between' }} />
-                                <IconButton size="large" color="primary" onClick={handleOpen}>
-                                    <Badge color="error" >
-                                        <ShoppingCartOutlinedIcon />
-                                    </Badge>
-                                </IconButton>
+                                {(day === 3 || day === 4) ?
+                                    <IconButton size="large" color="primary" onClick={handleOpen}>
+                                        <Badge color="error" >
+                                            <ShoppingCartOutlinedIcon />
+                                        </Badge>
+                                    </IconButton>
+                                    : null
+                                }
                             </>
                         }
 

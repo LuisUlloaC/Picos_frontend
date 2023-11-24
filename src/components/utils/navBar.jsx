@@ -111,7 +111,6 @@ export default function NavBar({ day }) {
                         if (checkoutOrder(api, state.cart).sucess) {
                             handleClose();
                         } else {
-                            console.log('pepo')
                             alert('No disponible')
                         }
                     }}>
@@ -154,12 +153,12 @@ export default function NavBar({ day }) {
                             <>
                                 <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between' }} />
                                 {(day === 3 || day === 4) ?
+                                    null :
                                     <IconButton size="large" color="primary" onClick={handleOpen}>
                                         <Badge color="error" >
                                             <ShoppingCartOutlinedIcon />
                                         </Badge>
                                     </IconButton>
-                                    : null
                                 }
                             </>
                         }

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import ProductCard from "../utils/card";
 import { Context } from "../context/provider";
-import { createProduct, getProductImage, getProducts, uploadProductImage } from "../../actions/products";
+import { createProduct, getProducts, uploadProductImage } from "../../actions/products";
 import StorageCard from "../utils/storageCard";
 import IconButton from '@mui/material/IconButton';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';

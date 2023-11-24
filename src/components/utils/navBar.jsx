@@ -14,7 +14,6 @@ import { useNavigate } from "react-router-dom";
 import Modal from '@mui/material/Modal';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { checkoutOrder } from '../../actions/bills';
-import ErrorAlert from './errorAlert';
 
 
 

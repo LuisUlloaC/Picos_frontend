@@ -82,7 +82,7 @@ export default function BillCard({ id, date, status }) {
                 borderRadius: 8, flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center',
                 boxShadow: '0px 4px 8px 0px rgba(0,0,0,0.2)'
             }}>
-                <img onClick={() => {handleOpen();}}   src={Pdfbg} style={{ display: 'flex', minHeight: '50%', width: '50%', padding: '1%' }} />
+                <img onClick={() => {handleOpen();}} alt='bill'   src={Pdfbg} style={{ display: 'flex', minHeight: '50%', width: '50%', padding: '1%' }} />
                 <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '20%', width: '100%' }}>
                     <span>{id}</span>
                 </div>

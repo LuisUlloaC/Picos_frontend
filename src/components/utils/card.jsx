@@ -13,7 +13,6 @@ import * as Yup from "yup";
 import ErrorAlert from "../utils/errorAlert";
 
 export default function ProductCard({ image, id, name = 'product', price = 0, stock = '0' }) {
-    const [inputValue, setInputValue] = React.useState('');
 
     const { setState, api } = React.useContext(Context);
 

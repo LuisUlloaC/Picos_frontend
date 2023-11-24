@@ -131,7 +131,7 @@ export default function BillsView() {
                     borderRadius: 8, flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center',
                     boxShadow: '0px 4px 8px 0px rgba(0,0,0,0.2)'
                 }}>
-                    <img src={Pdfbg} style={{ display: 'flex', minHeight: '50%', width: '50%', padding: '1%' }} />
+                    <img src={Pdfbg} alt='pdf' style={{ display: 'flex', minHeight: '50%', width: '50%', padding: '1%' }} />
                     <div style={{ display: 'flex', flexWrap: 'wrap', height: '60%', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
                         <span>Resumen</span>
                     </div>

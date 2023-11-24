@@ -1,6 +1,5 @@
 import * as React from "react";
 import IconButton from '@mui/material/IconButton';
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import { Context } from '../context/provider';
 import { useContext } from 'react';
 import { getContractInfo, getIssuePDF } from "../../actions/contracts";

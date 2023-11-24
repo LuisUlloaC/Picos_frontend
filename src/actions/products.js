@@ -126,7 +126,6 @@ export const uploadProductImage = async (api, file) => {
 };
 
 export const deleteProductImage = async (api, imageId) => {
-  let result = null;
   let response = null;
   let sucess = false;
 

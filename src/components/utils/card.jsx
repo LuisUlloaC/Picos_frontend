@@ -47,7 +47,7 @@ export default function ProductCard({ image, id, name = 'product', price = 0, st
     }
 
     const validationSchema = Yup.object().shape({
-        amount: Yup.string().required('Cantidad requerida').matches(/^[0-9]+$/, 'Cantidad solo admite números'),
+        amount: Yup.number().typeError('La cantidad a comprar debe de ser un número').required('Cantidad requerida').max(stock, `No puede comprar más de ${stock}KG`)
     });
 
     return (
@@ -59,7 +59,7 @@ export default function ProductCard({ image, id, name = 'product', price = 0, st
             />
             <Formik
                 initialValues={{
-                    amount: "",
+                    amount: null,
                 }}
                 validationSchema={validationSchema}
                 onSubmit={async (values, {resetForm}) => {

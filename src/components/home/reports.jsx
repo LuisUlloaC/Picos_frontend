@@ -62,7 +62,8 @@ export default function IssuesView({contractId}) {
         (async () => {
             let response = await getContractInfo(api, contractId);
             if (response?.sucess) {
-                setIssues(response.result.issues);
+                let orderedList = response.result.issues.sort((a, b) => a.id - b.id);
+                setIssues(orderedList);
             }
         })();
     }, [api, loading, contractId])

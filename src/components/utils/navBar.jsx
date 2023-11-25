@@ -111,7 +111,7 @@ export default function NavBar({ day }) {
                         if (checkoutOrder(api, state.cart).sucess) {
                             handleClose();
                         } else {
-                            alert('No disponible')
+                            alert(checkoutOrder(api, state.cart).response)
                         }
                     }}>
                         <ArrowForwardIosIcon />

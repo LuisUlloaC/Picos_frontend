@@ -108,10 +108,10 @@ export default function NavBar({ day }) {
 
                     </div>
                     <IconButton style={{ display: 'flex' }} onClick={() => {
-                        if (checkoutOrder(api, state.cart).sucess) {
+                        if (checkoutOrder(api, state.cart)) {
                             handleClose();
                         } else {
-                            alert(checkoutOrder(api, state.cart).response)
+                            alert('No disponible')
                         }
                     }}>
                         <ArrowForwardIosIcon />

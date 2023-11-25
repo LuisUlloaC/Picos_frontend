@@ -31,8 +31,12 @@ export default function ProductCard({ image, id, name = 'product', price = 0, st
             let found = false;
             for (let element of oldCart) {
                 if (element.product_id === id) {
-                    element.amount += Number(amount);
-                    element.price += Number(price) * Number(amount)
+                    if (element.amount += Number(amount) > stock) {
+                        element.amount = stock
+                    } else {
+                        element.amount += Number(amount);
+                    }
+                    element.price = Number(price) * Number(element.amount)
                     found = true;
                 }
             }
@@ -59,40 +63,43 @@ export default function ProductCard({ image, id, name = 'product', price = 0, st
             />
             <Formik
                 initialValues={{
-                    amount: null,
+                    amount: "",
                 }}
                 validationSchema={validationSchema}
-                onSubmit={async (values, {resetForm}) => {
+                onSubmit={async (values, { resetForm }) => {
                     addToCart(values.amount, price);
                     resetForm();
-                    
                 }}>
 
                 {({ errors, touched }) => (
-                    <Form style={{display: 'flex', flexDirection: 'column', height: '100%'}}>
-                        <CardContent style={{ display: 'flex', flexDirection: 'row', height: '20%', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <Form style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                        <CardContent style={{ display: 'flex', flexDirection: 'row', height: '20%', justifyContent: stock === 0 ? 'center' : 'space-between', alignItems: 'center' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: stock === 0 ? 'center' : null }}>
                                 <span style={{ display: 'flex', flexWrap: 'wrap' }}>{name}</span>
-                                <span>{stock}KG</span>
+                                <span>{stock === 0 ? 'agotado' : stock+'KG'}</span>
                             </div>
-
-                            <IconButton type="submit">
-                                <AddShoppingCartOutlinedIcon />
-                            </IconButton>
-                        </CardContent>
-                        <CardActions style={{ display: 'flex', flexDirection: 'column', height: '10%', }}>
-                            <div style={{ display: 'flex', width: '100%', height: '10%', justifyContent: 'space-between', alignItems: 'center', marginBottom: '5%' }}>
-                                <IconButton sx={{ '&:hover': { backgroundColor: 'transparent' } }}>
-                                    <AttachMoneyOutlinedIcon />
-                                    <span>{price}</span>
+                            {stock === 0 ? null :
+                                <IconButton type="submit">
+                                    <AddShoppingCartOutlinedIcon />
                                 </IconButton>
-                                <div style={{ display: 'flex', flexGrow: 1, justifyContent: 'flex-end'}}>
-                                    <Field className='card-input' name="amount" />
-                                    {errors.amount && touched.amount && <ErrorAlert errorBody={errors.amount} />}
-                                    <span>KG</span>
+                            }
+                        </CardContent>
+                        {stock === 0 ? null :
+
+                            <CardActions style={{ display: 'flex', flexDirection: 'column', height: '10%', }}>
+                                <div style={{ display: 'flex', width: '100%', height: '10%', justifyContent: 'space-between', alignItems: 'center', marginBottom: '5%' }}>
+                                    <IconButton sx={{ '&:hover': { backgroundColor: 'transparent' } }}>
+                                        <AttachMoneyOutlinedIcon />
+                                        <span>{price}</span>
+                                    </IconButton>
+                                    <div style={{ display: 'flex', flexGrow: 1, justifyContent: 'flex-end' }}>
+                                        <Field className='card-input' name="amount" />
+                                        {errors.amount && touched.amount && <ErrorAlert errorBody={errors.amount} />}
+                                        <span>KG</span>
+                                    </div>
                                 </div>
-                            </div>
-                        </CardActions>
+                            </CardActions>
+                        }
                     </Form>
                 )}
             </Formik>

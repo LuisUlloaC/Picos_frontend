@@ -109,6 +109,12 @@ export default function NavBar({ day }) {
                     </div>
                     <IconButton style={{ display: 'flex' }} onClick={() => {
                         if (checkoutOrder(api, state.cart)) {
+                            setState(oldState =>{
+                                return{
+                                    ...oldState,
+                                    cart: []
+                                }
+                            } )
                             handleClose();
                         } else {
                             alert('No disponible')

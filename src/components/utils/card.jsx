@@ -51,7 +51,7 @@ export default function ProductCard({ image, id, name = 'product', price = 0, st
     }
 
     const validationSchema = Yup.object().shape({
-        amount: Yup.number().typeError('La cantidad a comprar debe de ser un número').required('Cantidad requerida').max(stock, `No puede comprar más de ${stock}KG`)
+        amount: Yup.number().typeError('La cantidad a comprar debe de ser un número').required('Cantidad requerida').max(stock, `No puede comprar más de ${stock}KG`).min(1, 'No puede comprar menos de 1KG')
     });
 
     return (

@@ -51,7 +51,7 @@ export default function ContractsView() {
     };
 
     const validationSchema = Yup.object().shape({
-        bank_office: Yup.string().required('Oficina bancaria requerido').test('no-digits', 'Oficina bancaria solo se admiten letras', value => !/\d/.test(value)),
+        bank_office: Yup.string().required('Oficina bancaria requerido').matches(/^[0-9]+$/, 'Oficina bancaria solo admite números'),
         bank_location: Yup.string().required('Ubicación del banco').test('no-digits', 'Ubicacion del banco solo se admiten letras', value => !/\d/.test(value)),
         bank_name: Yup.string().required('Nombre del banco requerido').test('no-digits', 'Nombre del banco solo admite letras', value => !/\d/.test(value)),
         account_number: Yup.string().required('Número de cuenta requerido').matches(/^[0-9]+$/, 'Número de cuenta solo admite números'),

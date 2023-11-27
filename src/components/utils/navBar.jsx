@@ -158,6 +158,8 @@ export default function NavBar({ day }) {
                             :
                             <>
                                 <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between' }} />
+                                {state.hasContract ?  
+                                <>
                                 {(day === 3 || day === 4) ?
                                     null :
                                     <IconButton size="large" color="primary" onClick={handleOpen}>
@@ -166,6 +168,9 @@ export default function NavBar({ day }) {
                                         </Badge>
                                     </IconButton>
                                 }
+                                </>
+                            : null    
+                            }
                             </>
                         }
 

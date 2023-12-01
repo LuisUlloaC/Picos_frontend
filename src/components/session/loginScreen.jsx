@@ -42,7 +42,6 @@ export default function LoginScreen() {
         setState(response.state_data);
         navigate("/home");
       } else {
-        console.log(response.result.response.status);
         if (response.result.response.status === 401) {
           setWrongCredentials(true)
         } else if (response.result.response.status === 400) {

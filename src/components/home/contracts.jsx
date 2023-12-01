@@ -4,7 +4,7 @@ import IconButton from '@mui/material/IconButton';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import { Context } from '../context/provider';
 import { useContext } from 'react';
-import { createNewContractIssue, getContracts } from "../../actions/contracts";
+import { createNewContractIssue, getContracts, getIssuePDF } from "../../actions/contracts";
 import ContratoBg from '../../assets/contratoBg.png';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
@@ -12,19 +12,35 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import ErrorAlert from "../utils/errorAlert";
+import SimCardDownloadIcon from '@mui/icons-material/SimCardDownload';
 
 
 export default function ContractsView() {
     const { setState, api } = useContext(Context);
     const [contracts, setContracts] = React.useState([]);
-    const [loading, setLoading] = React.useState(false);
+    const [loading, setLoading] = React.useState(true);
     const [open, setOpen] = React.useState(false);
+    const [openDownloader, setOpenDownloader] = React.useState(false);
+    const [pfdUrl, setPdfUrl] = React.useState(false);
 
     const handleOpen = () => {
         setOpen(true);
     };
     const handleClose = () => {
         setOpen(false);
+    };
+
+    const handleOpenDownloader = (contract_id) => {
+        setOpenDownloader(true);
+        setLoading(true);
+        (async () => {
+            let pdf = await getIssuePDF(api, contract_id);
+            setPdfUrl(pdf.result);
+            setLoading(false);
+        })();
+    };
+    const handleCloseDownloader = () => {
+        setOpenDownloader(false);
     };
 
 
@@ -71,11 +87,28 @@ export default function ContractsView() {
         (async () => {
             let response = await getContracts(api);
             setContracts(response.result.contracts);
+            setLoading(false);
         })();
     }, [api, loading])
 
     return (
         <>
+
+            <Modal
+                open={openDownloader}
+                onClose={handleCloseDownloader}
+            >
+                <Box sx={{ ...style, height: '15%' }}>
+                    <h2 id="child-modal-title">Obteniendo archivo...</h2>
+                    {loading ? null :
+                        <>
+                            <IconButton href={pfdUrl} download='contract.pdf' style={{ display: 'flex' }} sx={{ height: '50%', width: '15%' }} >
+                                <SimCardDownloadIcon sx={{ height: '100%', width: '100%' }} />
+                            </IconButton>
+                        </>
+                    }
+                </Box>
+            </Modal>
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -92,9 +125,11 @@ export default function ContractsView() {
                         }}
                         validationSchema={validationSchema}
                         onSubmit={async values => {
-                            await createNewContractIssue(api, values.template_id,
+                            const contract_id = await createNewContractIssue(api, values.template_id,
                                 values.bank_office, values.bank_location, values.bank_name, values.account_number
-                            );
+                            )
+                            const file = await getIssuePDF(api, contract_id.response.data.issue_id)
+                            handleOpenDownloader(contract_id.response.data.issue_id)
                             setLoading(true)
                             handleClose()
                         }}
@@ -117,12 +152,14 @@ export default function ContractsView() {
                                 <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
                                     <span>Número de cuenta: </span>
                                     <Field className='card-input' name="account_number" />
-                                   {errors.account_number && touched.account_number && <ErrorAlert errorBody={errors.account_number} />}
+                                    {errors.account_number && touched.account_number && <ErrorAlert errorBody={errors.account_number} />}
                                 </div>
                                 <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
                                     <span>Nombre del banco: </span>
-                                    <Field className='card-input' style={{border: 'none', outline: 'none', 
-                                    borderRadius: 8,width: '40%', textAlign: 'center'}} name="bank_name" as="select">
+                                    <Field className='card-input' style={{
+                                        border: 'none', outline: 'none',
+                                        borderRadius: 8, width: '40%', textAlign: 'center'
+                                    }} name="bank_name" as="select">
                                         <option className='options' value="">Select...</option>
                                         <option className='options' value="BPA">BPA</option>
                                         <option className='options' value="BANDEC">BANDEC</option>
@@ -164,7 +201,7 @@ export default function ContractsView() {
                     }}>
                         <img src={ContratoBg} alt='img' style={{ display: 'flex', minHeight: '50%', width: '50%', padding: '1%', marginLeft: '10%' }} />
                         <div style={{ display: 'flex', flexWrap: 'wrap', height: '25%', width: '100%', justifyContent: 'space-evenly', alignItems: 'center' }}>
-                            <span>{contrato.id}</span>
+                            <span>{contrato.number}</span>
                         </div>
                         <div style={{ display: 'flex', flexWrap: 'wrap', height: '10%', width: '100%', justifyContent: 'space-evenly' }}>
                             <span>Estado:</span> <span>{contrato.active ? 'activo' : 'cerrado'}</span>

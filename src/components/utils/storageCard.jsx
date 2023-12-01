@@ -53,7 +53,9 @@ export default function StorageCard({ image = '', name = 'product', price = '0',
         name: Yup.string().required('Nombre requerido'),
         price: Yup.string().required('Precio requerido').matches(/^[0-9]+$/, 'Precio solo admite números'),
         stock: Yup.string().required('Cantidad requerida').matches(/^[0-9]+$/, 'Cantidad solo admite números'),
+        file: Yup.mixed().required('Imagen requerida')
     });
+
 
     const style = {
         display: 'flex',
@@ -92,10 +94,11 @@ export default function StorageCard({ image = '', name = 'product', price = '0',
                             name: name,
                             price: price,
                             stock: stock,
+                            file: null
                         }}
                         validationSchema={validationSchema}
                         onSubmit={async values => {
-                            let imageId = (await uploadProductImage(api, file)).result;
+                            let imageId = (await uploadProductImage(api, values.file)).result;
                             await editProduct(api, id, values.name, values.stock, values.price, imageId);
                             await deleteProductImage(api, image);
                             setLoading(true)
@@ -128,8 +131,8 @@ export default function StorageCard({ image = '', name = 'product', price = '0',
                                         style={{ width: '45%', alignContent: 'center', alignItems: 'center', backgroundColor: 'transparent' }}>
                                         Seleccionar...
                                     </button>
-                                    <input type="file" ref={fileInput} onChange={handleFileChange} style={{ display: 'none' }} />
-
+                                    <Field type="file" name="file" ref={fileInput} onChange={handleFileChange} style={{ display: 'none' }} />
+                                    {errors.file && touched.file && <ErrorAlert errorBody={errors.file} />}
                                 </div>
                                 <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
                                     <span>Cantidad: </span>

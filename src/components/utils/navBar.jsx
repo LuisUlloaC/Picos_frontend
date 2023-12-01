@@ -107,21 +107,25 @@ export default function NavBar({ day }) {
                         ))}
 
                     </div>
-                    <IconButton style={{ display: 'flex' }} onClick={() => {
-                        if (checkoutOrder(api, state.cart)) {
-                            setState(oldState =>{
-                                return{
-                                    ...oldState,
-                                    cart: []
-                                }
-                            } )
-                            handleClose();
-                        } else {
-                            alert('No disponible')
-                        }
-                    }}>
-                        <ArrowForwardIosIcon />
-                    </IconButton>
+                    {state?.cart === undefined  || state?.cart.length === 0 ? null :
+
+                        <IconButton style={{ display: 'flex' }} onClick={() => {
+                            if (checkoutOrder(api, state.cart)) {
+                                setState(oldState => {
+                                    console.log(state?.cart.length)
+                                    return {
+                                        ...oldState,
+                                        cart: []
+                                    }
+                                })
+                                handleClose();
+                            } else {
+                                alert('No disponible')
+                            }
+                        }}>
+                            <ArrowForwardIosIcon />
+                        </IconButton>
+                    }
                 </Box>
             </Modal>
 
@@ -158,8 +162,6 @@ export default function NavBar({ day }) {
                             :
                             <>
                                 <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between' }} />
-                                {state.hasContract ?  
-                                <>
                                 {(day === 3 || day === 4) ?
                                     null :
                                     <IconButton size="large" color="primary" onClick={handleOpen}>
@@ -168,9 +170,6 @@ export default function NavBar({ day }) {
                                         </Badge>
                                     </IconButton>
                                 }
-                                </>
-                            : null    
-                            }
                             </>
                         }
 

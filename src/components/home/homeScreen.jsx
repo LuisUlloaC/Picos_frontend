@@ -16,11 +16,12 @@ export default function HomeScreen() {
       <div className="home-header">
         <NavBar />
       </div>
-      {(day === 3 || day === 4) ? <NoWorkingScreen message="Cerrado" /> :
-        <>
           {state.role === "admin"
-            ? <AdminHome />
-            : <Products />
+          ? <AdminHome />
+          : 
+          <>
+          {(day === 3 || day === 4) ? <NoWorkingScreen message="Cerrado" /> :
+            <Products />
           }
         </>
       }

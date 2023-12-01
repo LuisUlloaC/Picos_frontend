@@ -96,7 +96,7 @@ export default function IssuesView({contractId}) {
                             boxShadow: '0px 4px 8px 0px rgba(0,0,0,0.2)', cursor:'pointer'}}>
                             <img src={ContratoBg} alt='img' style={{ display: 'flex', minHeight: '50%', width: '50%', padding: '1%', marginLeft: '10%' }} />
                             <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '40%', width: '100%' }}>
-                                <span>{issue.id}</span>
+                                <span>{issue.number}</span>
                             </div>
                             <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '30%', width: '100%' }}>
                                 <span>Fecha:</span> <span>{(issue.date).split('T')[0]}</span>

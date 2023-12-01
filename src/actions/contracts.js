@@ -108,6 +108,7 @@ export const getIssuePDF = async (api, issueId) => {
     let sucess = false;
     let response = null;
     let result = null;
+    let edgeURL = null;
   
     await api
       .get("/issues/" + issueId + "/pdf", {
@@ -121,7 +122,9 @@ export const getIssuePDF = async (api, issueId) => {
         sucess = true;
         response = res;
         const fileBlob = new Blob([res.data]);
+        const edgeBlob = new Blob([res.data], {type: 'application/pdf'});
         result = window.URL.createObjectURL(fileBlob);
+        edgeURL = window.URL.createObjectURL(edgeBlob);
       })
       .catch((res) => {
         sucess = false;
@@ -131,5 +134,6 @@ export const getIssuePDF = async (api, issueId) => {
       sucess: sucess,
       response: response,
       result: result,
+      edgeURL: edgeURL
     };
   };

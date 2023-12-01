@@ -66,6 +66,7 @@ export const getBillSummaryPDFByDate = async (api, year, month) => {
   let sucess = false;
   let response = null;
   let result = null;
+  let edgeURL = null;
 
   await api
     .get("/bills/summary/pdf?year=" + year + "&month=" + month, {
@@ -76,10 +77,12 @@ export const getBillSummaryPDFByDate = async (api, year, month) => {
       },
     })
     .then((res) => {
-      sucess = true;
-      response = res;
-      const fileBlob = new Blob([res.data]);
-      result = window.URL.createObjectURL(fileBlob);
+        sucess = true;
+        response = res;
+        const fileBlob = new Blob([res.data]);
+        const edgeBlob = new Blob([res.data], {type: 'application/pdf'});
+        result = window.URL.createObjectURL(fileBlob);
+        edgeURL = window.URL.createObjectURL(edgeBlob);
     })
     .catch((res) => {
       sucess = false;
@@ -89,6 +92,7 @@ export const getBillSummaryPDFByDate = async (api, year, month) => {
     sucess: sucess,
     response: response,
     result: result,
+    edgeURL: edgeURL,
   };
 };
 
@@ -96,6 +100,7 @@ export const getBillPDF = async (api, bill_id) => {
   let sucess = false;
   let response = null;
   let result = null;
+  let edgeURL = null;
 
   await api
     .get("/bills/" + bill_id + "/pdf", {
@@ -107,9 +112,11 @@ export const getBillPDF = async (api, bill_id) => {
     })
     .then((res) => {
       sucess = true;
-      response = res;
-      const fileBlob = new Blob([res.data]);
-      result = window.URL.createObjectURL(fileBlob);
+        response = res;
+        const fileBlob = new Blob([res.data]);
+        const edgeBlob = new Blob([res.data], {type: 'application/pdf'});
+        result = window.URL.createObjectURL(fileBlob);
+        edgeURL = window.URL.createObjectURL(edgeBlob);
     })
     .catch((res) => {
       sucess = false;
@@ -119,6 +126,7 @@ export const getBillPDF = async (api, bill_id) => {
     sucess: sucess,
     response: response,
     result: result,
+    edgeURL: edgeURL,
   };
 };
 

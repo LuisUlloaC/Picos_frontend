@@ -65,7 +65,6 @@ export default function DocumentsView({ contractId }) {
                 }
             }));
         }
-
         (async () => {
             let response = await getTemplates(api);
             if (response.sucess) {

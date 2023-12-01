@@ -19,15 +19,16 @@ export default function BillsView() {
     const [bills, setBills] = React.useState([])
     const { api } = React.useContext(Context);
     const [open, setOpen] = React.useState(false);
-
+    const [pdfPreviewUrl, setPdfpreviewUrl] = React.useState(false);
     const [pfdUrl, setPdfUrl] = React.useState(false);
-
+    
     const handleOpen = () => {
         setOpen(true);
         setLoading(true);
         (async () => {
             let pdf = await getBillSummaryPDFByDate(api, currentYear, currentMonth + 1);
             setPdfUrl(pdf.result);
+            setPdfpreviewUrl(pdf.edgeURL);
             setLoading(false);
         })();
 
@@ -94,7 +95,7 @@ export default function BillsView() {
             >
                 <Box sx={{ ...style, height: '20%' }}>
                     <h2 id="child-modal-title">Obteniendo documento</h2>
-                    <a href={pfdUrl} target="_blank">Visualizar</a>
+                    <a href={pdfPreviewUrl} target="_blank">Visualizar</a>
                     {loading ? null :
                         <>
                         <IconButton href={pfdUrl} download={'resumen '+ String(currentMonth+1) +'-'+ currentYear+'.pdf'} style={{ display: 'flex' }} sx={{ height: '50%', width: '18%' }} >

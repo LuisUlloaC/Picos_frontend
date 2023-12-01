@@ -22,7 +22,8 @@ export default function ContractsView() {
     const [loading, setLoading] = React.useState(true);
     const [open, setOpen] = React.useState(false);
     const [openDownloader, setOpenDownloader] = React.useState(false);
-    const [pfdUrl, setPdfUrl] = React.useState(false);
+    const [pfdDownloadUrl, setPdfDownloadUrl] = React.useState(false);
+    const [pdfPreviewUrl, setPdfpreviewUrl] = React.useState(false);
 
     const handleOpen = () => {
         setOpen(true);
@@ -36,7 +37,8 @@ export default function ContractsView() {
         setLoading(true);
         (async () => {
             let pdf = await getIssuePDF(api, contract_id);
-            setPdfUrl(pdf.result);
+            setPdfDownloadUrl(pdf.result);
+            setPdfpreviewUrl(pdf.edgeURL);
             setLoading(false);
         })();
     };
@@ -101,10 +103,10 @@ export default function ContractsView() {
             >
                 <Box sx={{ ...style, height: '20%' }}>
                     <h2 id="child-modal-title">Documento creado</h2>
-                    <><a href={pfdUrl} target="_blank">Visualizar</a></>
+                    <><a href={pdfPreviewUrl} target="_blank">Visualizar</a></>
                     {loading ? null :
                         <>
-                            <IconButton href={pfdUrl} download={`contract ${contractDate}.pdf`} style={{ display: 'flex' }} sx={{ height: '50%', width: '15%' }} >
+                            <IconButton href={pfdDownloadUrl} download={`contract ${contractDate}.pdf`} style={{ display: 'flex' }} sx={{ height: '50%', width: '15%' }} >
                                 <SimCardDownloadIcon sx={{ height: '100%', width: '100%' }} />
                                 <span>Descargar</span>
                             </IconButton>

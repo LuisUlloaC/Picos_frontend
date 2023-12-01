@@ -54,6 +54,17 @@ export default function DocumentsView({ contractId }) {
     };
 
     React.useEffect(() => {
+        if(!state.ContractData){
+            setState(oldState => ({
+                ...oldState,
+                ContractData: {
+                    bank_office: "12345678",
+                    bank_name: "BANDEC",
+                    bank_location: "ciudad",
+                    account_number: "12345678"
+                }
+            }));
+        }
 
         (async () => {
             let response = await getTemplates(api);

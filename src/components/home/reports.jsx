@@ -18,9 +18,11 @@ export default function IssuesView({ contractId }) {
     const [open, setOpen] = React.useState(false);
     const [pfdUrl, setPdfUrl] = React.useState(false);
     const [issueDate, setIssueDate] = React.useState('');
+    const [fileName, setFileName] = React.useState('');
 
-    const handleOpen = (issueId, date) => {
-        setIssueDate(date)
+    const handleOpen = (issueId, fileName, date) => {
+        setIssueDate(date);
+        setFileName(fileName);
         setOpen(true);
         setLoading(true);
         (async () => {
@@ -64,17 +66,7 @@ export default function IssuesView({ contractId }) {
 
     React.useEffect(() => {
         (async () => {
-            if(!state.ContractData){
-                setState(oldState => ({
-                    ...oldState,
-                    ContractData: {
-                        bank_office: "12345678",
-                        bank_name: "BANDEC",
-                        bank_location: "ciudad",
-                        account_number: "12345678"
-                    }
-                }));
-            }
+            
             let templates = await getTemplates(api);
             let response = await getContractInfo(api, contractId);
             if (response?.sucess) {
@@ -95,7 +87,7 @@ export default function IssuesView({ contractId }) {
                     <h2 id="child-modal-title">Obteniendo documento</h2>
                     {loading ? null :
                         <>
-                            <IconButton href={pfdUrl} download={`issue ${issueDate}.pdf`} style={{ display: 'flex' }} sx={{ height: '50%', width: '25%' }} >
+                            <IconButton href={pfdUrl} download={`${fileName} ${issueDate}.pdf`} style={{ display: 'flex' }} sx={{ height: '50%', width: '25%' }} >
                                 <SimCardDownloadIcon sx={{ height: '100%', width: '100%' }} />
                                 <span>Descargar</span>
                             </IconButton>
@@ -108,7 +100,15 @@ export default function IssuesView({ contractId }) {
             <div className="title">Historial</div>
             <div className="list">
                 {issues.map((issue) => (
-                    <div key={issue.id} onClick={() => { handleOpen(issue.id, (issue.date).split('T')[0]) }} style={{
+                    <div key={issue.id} onClick={() => {
+                        let fileName = ''
+                        {templates.map(element => {
+                            if (element.id === issue.template) {
+                                fileName = element.name
+                            }
+                        })}
+                        handleOpen(issue.id, fileName, (issue.date).split('T')[0]) 
+                    }} style={{
                         display: 'flex', width: '15%', height: '40%', margin: '1%',
                         borderRadius: 8, flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center',
                         boxShadow: '0px 4px 8px 0px rgba(0,0,0,0.2)', cursor: 'pointer'

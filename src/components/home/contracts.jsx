@@ -125,13 +125,12 @@ export default function ContractsView() {
                         }}
                         validationSchema={validationSchema}
                         onSubmit={async values => {
+                            handleClose()
                             const contract_id = await createNewContractIssue(api, values.template_id,
                                 values.bank_office, values.bank_location, values.bank_name, values.account_number
                             )
-                            const file = await getIssuePDF(api, contract_id.response.data.issue_id)
                             handleOpenDownloader(contract_id.response.data.issue_id)
                             setLoading(true)
-                            handleClose()
                         }}
 
                         style={{

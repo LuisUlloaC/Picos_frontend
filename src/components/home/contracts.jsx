@@ -16,7 +16,7 @@ import SimCardDownloadIcon from '@mui/icons-material/SimCardDownload';
 
 
 export default function ContractsView() {
-    const { setState, api } = useContext(Context);
+    const { state, setState, api } = useContext(Context);
     const [contracts, setContracts] = React.useState([]);
     const [contractDate, setContractDate] = React.useState('');
     const [loading, setLoading] = React.useState(true);
@@ -70,10 +70,21 @@ export default function ContractsView() {
     };
 
     const validationSchema = Yup.object().shape({
-        bank_office: Yup.string().required('Oficina bancaria requerido').matches(/^[0-9]+$/, 'Oficina bancaria solo admite números'),
-        bank_location: Yup.string().required('Ubicación del banco').test('no-digits', 'Ubicacion del banco solo se admiten letras', value => !/\d/.test(value)),
-        bank_name: Yup.string().required('Nombre del banco requerido').test('no-digits', 'Nombre del banco solo admite letras', value => !/\d/.test(value)),
-        account_number: Yup.string().required('Número de cuenta requerido').matches(/^[0-9]+$/, 'Número de cuenta solo admite números'),
+    bank_office: Yup.string()
+       .required('Oficina bancaria requerido')
+       .matches(/^[0-9]+$/, 'Oficina bancaria solo admite números')
+       .max(4, 'Oficina bancaria no puede tener más de 4 caracteres'),
+   bank_location: Yup.string()
+       .required('Ubicación del banco')
+       .test('no-digits', 'Ubicacion del banco solo se admiten letras', value => !/\d/.test(value))
+       .max(15, 'Ubicación del banco no puede tener más de 15 caracteres'),
+   bank_name: Yup.string()
+       .required('Nombre del banco requerido')
+       .test('no-digits', 'Nombre del banco solo admite letras', value => !/\d/.test(value)),
+   account_number: Yup.string()
+       .required('Número de cuenta requerido')
+       .matches(/^[0-9]+$/, 'Número de cuenta solo admite números')
+       .max(16, 'Número de cuenta no puede tener más de 16 caracteres'),
     });
 
 
@@ -137,18 +148,30 @@ export default function ContractsView() {
                             handleOpenDownloader(contract_id.response.data.issue_id);
                             var today = new Date().toJSON().slice(0, 10);
                             setContractDate(today)
-                            setState(oldState => {
-                                let contract = oldState.ContractData;
-                                contract.bank_location = values.bank_location;
-                                contract.bank_name = values.bank_name;
-                                contract.bank_office = values.bank_office;
-                                contract.account_number = values.account_number;
-                                console.log('here')
-                                return ({
+                            if(!state.ContractData){
+                                setState(oldState => ({
                                     ...oldState,
-                                    ContractData: contract
-                                })
-                            });
+                                    ContractData: {
+                                        bank_office: values.bank_office,
+                                        bank_name: values.bank_name,
+                                        bank_location: values.bank_location,
+                                        account_number: values.account_number
+                                    }
+                                }));
+                            }else{
+                                setState(oldState => {
+                                    let contract = oldState.ContractData;
+                                    contract.bank_location = values.bank_location;
+                                    contract.bank_name = values.bank_name;
+                                    contract.bank_office = values.bank_office;
+                                    contract.account_number = values.account_number;
+                                    console.log('here')
+                                    return ({
+                                        ...oldState,
+                                        ContractData: contract
+                                    })
+                                });
+                            }
                             setLoading(true);
                         }}
 

@@ -50,9 +50,17 @@ export default function StorageCard({ image = '', name = 'product', price = '0',
     })
 
     const validationSchema = Yup.object().shape({
-        name: Yup.string().required('Nombre requerido'),
-        price: Yup.string().required('Precio requerido').matches(/^[0-9]+$/, 'Precio solo admite números'),
-        stock: Yup.string().required('Cantidad requerida').matches(/^[0-9]+$/, 'Cantidad solo admite números'),
+        name: Yup.string()
+      .required('Nombre requerido')
+      .max(15, 'Nombre no puede tener más de 15 caracteres'),
+  price: Yup.string()
+      .required('Precio requerido')
+      .matches(/^[0-9]+$/, 'Precio solo admite números')
+      .max(6, 'Precio no puede tener más de 6 caracteres'),
+  stock: Yup.string()
+      .required('Cantidad requerida')
+      .matches(/^[0-9]+$/, 'Cantidad solo admite números')
+      .max(4, 'Cantidad no puede tener más de 4 caracteres'),
     });
 
     const style = {

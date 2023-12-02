@@ -11,7 +11,7 @@ import SimCardDownloadIcon from '@mui/icons-material/SimCardDownload';
 
 
 export default function IssuesView({ contractId }) {
-    const { api } = useContext(Context);
+    const { api, state, setState } = useContext(Context);
     const [issues, setIssues] = React.useState([]);
     const [templates, setTemplates] = React.useState([]);
     const [loading, setLoading] = React.useState(false);
@@ -64,6 +64,17 @@ export default function IssuesView({ contractId }) {
 
     React.useEffect(() => {
         (async () => {
+            if(!state.ContractData){
+                setState(oldState => ({
+                    ...oldState,
+                    ContractData: {
+                        bank_office: "12345678",
+                        bank_name: "BANDEC",
+                        bank_location: "ciudad",
+                        account_number: "12345678"
+                    }
+                }));
+            }
             let templates = await getTemplates(api);
             let response = await getContractInfo(api, contractId);
             if (response?.sucess) {

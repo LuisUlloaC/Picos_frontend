@@ -88,15 +88,6 @@ export default function ContractsView() {
         (async () => {
             let response = await getContracts(api);
             setContracts(response.result.contracts);
-            setState(oldState => ({
-                ...oldState,
-                ContractData: {
-                    bank_office: "12345678",
-                    bank_name: "BANDEC",
-                    bank_location: "ciudad",
-                    account_number: "12345678"
-                }
-            }));
             setLoading(false);
         })();
     }, [loading])

@@ -8,7 +8,7 @@ import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import SimCardDownloadIcon from '@mui/icons-material/SimCardDownload';
 import IconButton from '@mui/material/IconButton';
-
+import CloseIcon from '@mui/icons-material/Close';
 
 export default function BillsView() {
     const [currentYear, setCurrentYear] = React.useState(new Date().getFullYear());
@@ -21,7 +21,7 @@ export default function BillsView() {
     const [open, setOpen] = React.useState(false);
     const [pdfPreviewUrl, setPdfpreviewUrl] = React.useState(false);
     const [pfdUrl, setPdfUrl] = React.useState(false);
-    
+
     const handleOpen = () => {
         setOpen(true);
         setLoading(true);
@@ -38,7 +38,7 @@ export default function BillsView() {
             URL.revokeObjectURL(pfdUrl);
             setOpen(false);
         }
-        
+
     };
 
     const style = {
@@ -94,14 +94,17 @@ export default function BillsView() {
                 onClose={handleClose}
             >
                 <Box sx={{ ...style, height: '20%' }}>
+                    <IconButton style={{ display: 'flex', position: 'absolute', top: '2%', right: '1%', justifyContent: 'flex-end' }} onClick={() => { handleClose() }}>
+                        <CloseIcon />
+                    </IconButton>
                     <h2 id="child-modal-title">Obteniendo documento</h2>
                     <a href={pdfPreviewUrl} target="_blank">Visualizar</a>
                     {loading ? null :
                         <>
-                        <IconButton href={pfdUrl} download={'resumen '+ String(currentMonth+1) +'-'+ currentYear+'.pdf'} style={{ display: 'flex' }} sx={{ height: '50%', width: '18%' }} >
-                            <SimCardDownloadIcon sx={{ height: '100%', width: '100%' }} />
-                            <span>Descargar</span>
-                        </IconButton>
+                            <IconButton href={pfdUrl} download={'resumen ' + String(currentMonth + 1) + '-' + currentYear + '.pdf'} style={{ display: 'flex' }} sx={{ height: '50%', width: '18%' }} >
+                                <SimCardDownloadIcon sx={{ height: '100%', width: '100%' }} />
+                                <span>Descargar</span>
+                            </IconButton>
                         </>
                     }
                 </Box>
@@ -128,20 +131,21 @@ export default function BillsView() {
                 </div>
             </div>
             <div className="list">
-                {bills.length !== 0 ? 
-                <div onClick={() => {handleOpen();
-                }} style={{
-                    display: 'flex', width: '13%', height: '40%', marginLeft: '2%',
-                    borderRadius: 8, flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center',
-                    boxShadow: '0px 4px 8px 0px rgba(0,0,0,0.2)'
-                }}>
-                    <img src={Pdfbg} alt='pdf' style={{ display: 'flex', minHeight: '50%', width: '50%', padding: '1%' }} />
-                    <div style={{ display: 'flex', flexWrap: 'wrap', height: '60%', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
-                        <span>Resumen</span>
+                {bills.length !== 0 ?
+                    <div onClick={() => {
+                        handleOpen();
+                    }} style={{
+                        display: 'flex', width: '13%', height: '40%', marginLeft: '2%',
+                        borderRadius: 8, flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center',
+                        boxShadow: '0px 4px 8px 0px rgba(0,0,0,0.2)'
+                    }}>
+                        <img src={Pdfbg} alt='pdf' style={{ display: 'flex', minHeight: '50%', width: '50%', padding: '1%' }} />
+                        <div style={{ display: 'flex', flexWrap: 'wrap', height: '60%', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                            <span>Resumen</span>
+                        </div>
                     </div>
-                </div>
-                : null    
-            }
+                    : null
+                }
                 {bills.map((bill) => (
                     <BillCard key={bill.id} id={bill.id} date={bill.date} status={bill.status} />
                 ))}

@@ -40,7 +40,7 @@ export default function DocumentsView({ contractId }) {
         transform: 'translate(-50%, -50%)',
         minWidth: '30%',
         maxWidth: '30%',
-        height: '15%',
+        height: '20%',
         bgcolor: 'background.paper',
         boxShadow: 24,
         borderRadius: 2,
@@ -54,7 +54,7 @@ export default function DocumentsView({ contractId }) {
     };
 
     React.useEffect(() => {
-        if(!state.ContractData){
+        if (!state.ContractData) {
             setState(oldState => ({
                 ...oldState,
                 ContractData: {
@@ -77,14 +77,13 @@ export default function DocumentsView({ contractId }) {
         <>
             <Modal
                 open={open}
-                onClose={handleClose}
             >
                 <Box sx={{ ...style }}>
-                    <h2 id="child-modal-title">Suplemento creado</h2>
-                    <>Descargar en historial</>
-                    <IconButton style={{ display: 'flex'}} onClick={() => { handleClose() }}>
+                    <IconButton style={{ display: 'flex', position: 'absolute', top: '2%', right: '1%', justifyContent: 'flex-end' }} onClick={() => { handleClose() }}>
                         <CloseIcon />
                     </IconButton>
+                    <h2 id="child-modal-title">Suplemento creado</h2>
+                    <div style={{ marginTop: '2%', marginBottom: '4%' }}>Descargar en historial</div>
                 </Box>
             </Modal>
 

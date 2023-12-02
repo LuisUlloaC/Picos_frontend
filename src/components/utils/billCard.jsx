@@ -6,6 +6,7 @@ import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import SimCardDownloadIcon from '@mui/icons-material/SimCardDownload';
 import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 
 
 export default function BillCard({ id, date, status }) {
@@ -31,7 +32,7 @@ export default function BillCard({ id, date, status }) {
             URL.revokeObjectURL(pfdUrl);
             setOpen(false);
         }
-        
+
     };
 
     const style = {
@@ -66,11 +67,14 @@ export default function BillCard({ id, date, status }) {
                 onClose={handleClose}
             >
                 <Box sx={{ ...style }}>
+                    <IconButton style={{ display: 'flex', position: 'absolute', top: '2%', right: '1%', justifyContent: 'flex-end' }} onClick={() => { handleClose() }}>
+                        <CloseIcon />
+                    </IconButton>
                     <h2 id="child-modal-title">Generando factura</h2>
                     {loading ? null :
-                        <IconButton href={pfdUrl} download={'factura '+ id+ ' ' + date +'.pdf'} style={{ display: 'flex' }} sx={{ height: '50%', width: '18%' }} >
+                        <IconButton href={pfdUrl} download={'factura ' + id + ' ' + date + '.pdf'} style={{ display: 'flex' }} sx={{ height: '50%', width: '18%' }} >
                             <SimCardDownloadIcon sx={{ height: '100%', width: '100%' }} />
-                        <span>Descargar </span>
+                            <span>Descargar </span>
                         </IconButton>
                     }
                 </Box>
@@ -83,7 +87,7 @@ export default function BillCard({ id, date, status }) {
                 borderRadius: 8, flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center',
                 boxShadow: '0px 4px 8px 0px rgba(0,0,0,0.2)'
             }}>
-                <img onClick={() => {handleOpen();}} alt='bill'   src={Pdfbg} style={{ display: 'flex', minHeight: '50%', width: '50%', padding: '1%' }} />
+                <img onClick={() => { handleOpen(); }} alt='bill' src={Pdfbg} style={{ display: 'flex', minHeight: '50%', width: '50%', padding: '1%' }} />
                 <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '20%', width: '100%' }}>
                     <span>{id}</span>
                 </div>

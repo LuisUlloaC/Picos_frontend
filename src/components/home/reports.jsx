@@ -7,6 +7,7 @@ import { getTemplates } from "../../actions/templates";
 import ContratoBg from '../../assets/contratoBg.png';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
+import CloseIcon from '@mui/icons-material/Close';
 import SimCardDownloadIcon from '@mui/icons-material/SimCardDownload';
 
 
@@ -19,6 +20,7 @@ export default function IssuesView({ contractId }) {
     const [pfdUrl, setPdfUrl] = React.useState(false);
     const [issueDate, setIssueDate] = React.useState('');
     const [fileName, setFileName] = React.useState('');
+    const [pdfPreviewUrl, setPdfpreviewUrl] = React.useState(false);
 
     const handleOpen = (issueId, fileName, date) => {
         setIssueDate(date);
@@ -28,6 +30,7 @@ export default function IssuesView({ contractId }) {
         (async () => {
             let pdf = await getIssuePDF(api, issueId);
             setPdfUrl(pdf.result);
+            setPdfpreviewUrl(pdf.edgeURL);
             setLoading(false);
         })();
 
@@ -66,7 +69,7 @@ export default function IssuesView({ contractId }) {
 
     React.useEffect(() => {
         (async () => {
-            
+
             let templates = await getTemplates(api);
             let response = await getContractInfo(api, contractId);
             if (response?.sucess) {
@@ -81,10 +84,13 @@ export default function IssuesView({ contractId }) {
         <>
             <Modal
                 open={open}
-                onClose={handleClose}
             >
                 <Box sx={{ ...style }}>
+                    <IconButton style={{ display: 'flex', position: 'absolute', top: '2%', right: '1%', justifyContent: 'flex-end' }} onClick={() => { handleClose() }}>
+                        <CloseIcon />
+                    </IconButton>
                     <h2 id="child-modal-title">Obteniendo documento</h2>
+                    <><a href={pdfPreviewUrl} target="_blank">Visualizar</a></>
                     {loading ? null :
                         <>
                             <IconButton href={pfdUrl} download={`${fileName} ${issueDate}.pdf`} style={{ display: 'flex' }} sx={{ height: '50%', width: '25%' }} >
@@ -102,12 +108,14 @@ export default function IssuesView({ contractId }) {
                 {issues.map((issue) => (
                     <div key={issue.id} onClick={() => {
                         let fileName = ''
-                        {templates.map(element => {
-                            if (element.id === issue.template) {
-                                fileName = element.name
-                            }
-                        })}
-                        handleOpen(issue.id, fileName, (issue.date).split('T')[0]) 
+                        {
+                            templates.map(element => {
+                                if (element.id === issue.template) {
+                                    fileName = element.name
+                                }
+                            })
+                        }
+                        handleOpen(issue.id, fileName, (issue.date).split('T')[0])
                     }} style={{
                         display: 'flex', width: '15%', height: '40%', margin: '1%',
                         borderRadius: 8, flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center',

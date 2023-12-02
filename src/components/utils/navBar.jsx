@@ -13,14 +13,22 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Modal from '@mui/material/Modal';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import CloseIcon from '@mui/icons-material/Close';
 import { checkoutOrder } from '../../actions/bills';
-
+import DeleteIcon from '@mui/icons-material/Delete';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
 
 
 export default function NavBar({ day }) {
     const { state, setState, api } = React.useContext(Context)
     let navigate = useNavigate();
     const [open, setOpen] = React.useState(false);
+
     const handleOpen = () => {
         setOpen(true);
     };
@@ -62,9 +70,9 @@ export default function NavBar({ day }) {
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        minWidth: '20%',
-        maxWidth: '20%',
-        height: '40%',
+        minWidth: '25%',
+        maxWidth: '25%',
+        height: '60%',
         bgcolor: 'background.paper',
         boxShadow: 24,
         borderRadius: 2,
@@ -73,43 +81,53 @@ export default function NavBar({ day }) {
         pt: 2,
         px: 4,
         pb: 3,
-        alignItems: 'center'
+        alignItems: 'center',
+        overflowX: 'hidden',
+        justifyContent: 'space-between',
+        fontFamily: 'Nico Moji'
 
     };
-
 
     return (
         <>
             <Modal
                 open={open}
-                onClose={handleClose}
             >
                 <Box sx={{ ...style }}>
+                    <IconButton style={{ display: 'flex', position: 'absolute', top: '2%', right: '1%', justifyContent: 'flex-end' }} onClick={() => { handleClose() }}>
+                        <CloseIcon />
+                    </IconButton>
                     <h2 id="child-modal-title">Revisar orden</h2>
-                    <div className="hide-scrollbar" style={{
-                        display: 'flex', width: '130%', height: '100%',
-                        flexDirection: 'column',
-                        overflowY: 'scroll',
-                        alignItems: 'center',
-                        justifyContent: 'flex-start'
-                    }}>
-                        <div style={{ display: 'flex', width: '105%', height: '20%', justifyContent: 'space-evenly' }}>
-                            <span>Nombre</span>
-                            <span>Cantidad</span>
-                            <span>Precio</span>
-                        </div>
-                        {state.cart?.map((item) => (
-                            <div key={item.product_id} onClick={() => removeItem(item.product_id)} style={{ display: 'flex', width: '120%', height: '20%', justifyContent: 'space-evenly' }}>
-                                <span>{item.productName}</span>
-                                <span>{item.amount}</span>
-                                <span>{item.price}</span>
-                            </div>
-                        ))}
-
-                    </div>
-                    {state?.cart === undefined  || state?.cart.length === 0 ? null :
-
-                        <IconButton style={{ display: 'flex' }} onClick={() => {
+                    <TableContainer  sx={{width: '120%', marginLeft: '15%', flexGrow: 2,  fontFamily: 'Nico Moji' }}>
+                        <Table sx={{ width: '80%',}} aria-label="simple table">
+                            <TableHead>
+                                <TableRow >
+                                    <TableCell sx={{ fontFamily: 'Nico Moji'}}>Nombre</TableCell>
+                                    <TableCell sx={{ fontFamily: 'Nico Moji'}}>Cantidad</TableCell>
+                                    <TableCell sx={{ fontFamily: 'Nico Moji'}}>Precio</TableCell>
+                                    <TableCell ></TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {state.cart?.map((item) => (
+                                    <TableRow
+                                        key={item.product_id}
+                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >
+                                        <TableCell align='center' sx={{ fontFamily: 'Nico Moji'}} component="th" scope="row">
+                                            {item.productName}
+                                        </TableCell>
+                                        <TableCell align='center' sx={{ fontFamily: 'Nico Moji'}}>{item.amount}</TableCell>
+                                        <TableCell align='center' sx={{ fontFamily: 'Nico Moji'}}>{item.price}</TableCell>
+                                        <TableCell align='center' sx={{ fontFamily: 'Nico Moji'}}><DeleteIcon onClick={() => removeItem(item.product_id)} /></TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                    
+                    {state?.cart === undefined || state?.cart.length === 0 ? null :
+                        <IconButton style={{ display: 'flex', fontFamily: 'nico Moji' }} onClick={() => {
                             if (checkoutOrder(api, state.cart)) {
                                 setState(oldState => {
                                     console.log(state?.cart.length)
@@ -123,6 +141,7 @@ export default function NavBar({ day }) {
                                 alert('No disponible')
                             }
                         }}>
+                            <span>Facturar </span>
                             <ArrowForwardIosIcon />
                         </IconButton>
                     }
@@ -165,7 +184,7 @@ export default function NavBar({ day }) {
                                 {(day === 3 || day === 4) ?
                                     null :
                                     <IconButton size="large" color="primary" onClick={handleOpen}>
-                                        <Badge color="error" >
+                                        <Badge badgeContent={state?.cart?.length} color="error" >
                                             <ShoppingCartOutlinedIcon />
                                         </Badge>
                                     </IconButton>

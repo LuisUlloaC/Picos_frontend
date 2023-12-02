@@ -55,8 +55,12 @@
     display: flex;
     border: none;
     outline: none;
-    height: 40px;
-    width: 40px;
-    border-radius: 50%;
+    height: 30px;
+    width: 70%;
+    border-radius: 10%;
+    justify-content: center;
+    align-items: center;
+    font-family: Nico Moji;
+    font-size: medium;
     background-color: chartreuse;
   }

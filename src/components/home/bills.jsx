@@ -47,9 +47,9 @@ export default function BillsView() {
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        minWidth: '22%',
-        maxWidth: '22%',
-        height: '15%',
+        minWidth: '30%',
+        maxWidth: '30%',
+        height: '25%',
         bgcolor: 'background.paper',
         boxShadow: 24,
         borderRadius: 2,
@@ -92,12 +92,14 @@ export default function BillsView() {
                 open={open}
                 onClose={handleClose}
             >
-                <Box sx={{ ...style }}>
-                    <h2 id="child-modal-title">Obteniendo archivo...</h2>
+                <Box sx={{ ...style, height: '20%' }}>
+                    <h2 id="child-modal-title">Obteniendo documento</h2>
+                    <a href={pfdUrl} target="_blank">Visualizar</a>
                     {loading ? null :
                         <>
                         <IconButton href={pfdUrl} download={'resumen '+ String(currentMonth+1) +'-'+ currentYear+'.pdf'} style={{ display: 'flex' }} sx={{ height: '50%', width: '18%' }} >
                             <SimCardDownloadIcon sx={{ height: '100%', width: '100%' }} />
+                            <span>Descargar</span>
                         </IconButton>
                         </>
                     }
@@ -125,6 +127,7 @@ export default function BillsView() {
                 </div>
             </div>
             <div className="list">
+                {bills.length !== 0 ? 
                 <div onClick={() => {handleOpen();
                 }} style={{
                     display: 'flex', width: '13%', height: '40%', marginLeft: '2%',
@@ -136,6 +139,8 @@ export default function BillsView() {
                         <span>Resumen</span>
                     </div>
                 </div>
+                : null    
+            }
                 {bills.map((bill) => (
                     <BillCard key={bill.id} id={bill.id} date={bill.date} status={bill.status} />
                 ))}

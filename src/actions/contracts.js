@@ -81,10 +81,10 @@ export const createNewContractIssue = async (api, template_id,
     let response = null;
     let result = null;
     await api.post("/issues/", { template_id, form_data:{
+        account_number: account_number,
         bank_office: bank_office, 
         bank_location: bank_location, 
         bank_name: bank_name, 
-        account_number: account_number
     }})
     .then(res => {
         sucess = true;

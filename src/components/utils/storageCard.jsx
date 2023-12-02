@@ -144,7 +144,8 @@ export default function StorageCard({ image = '', name = 'product', price = '0',
                                         {errors.price && touched.price && <ErrorAlert errorBody={errors.price} />}
                                     </div>
                                 </div>
-                                <IconButton type="submit" style={{ display: 'flex' }}>
+                                <IconButton type="submit" style={{ display: 'flex', fontFamily: 'Nico Moji' }}>
+                                    <span>Editar </span>
                                     <ArrowForwardIosIcon />
                                 </IconButton>
                             </Form>

@@ -66,10 +66,11 @@ export default function BillCard({ id, date, status }) {
                 onClose={handleClose}
             >
                 <Box sx={{ ...style }}>
-                    <h2 id="child-modal-title">Obteniendo archivo...</h2>
+                    <h2 id="child-modal-title">Generando factura</h2>
                     {loading ? null :
                         <IconButton href={pfdUrl} download={'resumen '+ date +'.pdf'} style={{ display: 'flex' }} sx={{ height: '50%', width: '18%' }} >
                             <SimCardDownloadIcon sx={{ height: '100%', width: '100%' }} />
+                        <span>Descargar </span>
                         </IconButton>
                     }
                 </Box>
@@ -97,8 +98,8 @@ export default function BillCard({ id, date, status }) {
                         <span style={{
                             padding: '1.5%',
                             marginBottom: '2%',
-                            backgroundColor: '#fff',
-                            color: 'black',
+                            backgroundColor: '#ff0000',
+                            color: 'white',
                             textAlign: 'center',
                             textDecoration: 'none',
                             borderRadius: '8px',
@@ -106,7 +107,7 @@ export default function BillCard({ id, date, status }) {
                             cursor: 'pointer',
                             transitionDuration: '0.4s',
                             boxShadow: '0 6px 10px 0 rgba(0,0,0,0.2), 0 6px 10px 0 rgba(0,0,0,0.19)'
-                        }} onClick={() => { closeBill(api, id); setStatusValue('cerrado') }} >Cambiar estado</span>
+                        }} onClick={() => { closeBill(api, id); setStatusValue('entregado') }} >Entregar</span>
                     </div> : null
 
                 }

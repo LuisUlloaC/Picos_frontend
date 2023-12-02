@@ -11,13 +11,15 @@ export default function HomeScreen() {
   const date = new Date();
   const day = date.getDay();
 
+
   return (
     <div className="home-container">
       <div className="home-header">
         <NavBar />
       </div>
           {state.role === "admin"
-          ? <AdminHome />
+          ?
+          <AdminHome />
           : 
           <>
           {(day === 3 || day === 4) ? <NoWorkingScreen message="Cerrado" /> :

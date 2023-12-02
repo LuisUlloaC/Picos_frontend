@@ -59,7 +59,7 @@ export default function LoginScreen() {
       {noContracts ?
         <>
           {(day === 3 || day === 4) ?
-            <ErrorAlert errorBody={'Cerrado'} /> 
+            <ErrorAlert errorBody={`No se puede acceder porque es ${day === 3 ? 'miércoles' : 'jueves'}. No abrimos hasta el viernes`} /> 
             : 
             <ErrorAlert errorBody={'No tiene ningún contrato activo'} />
             }
@@ -88,7 +88,9 @@ export default function LoginScreen() {
             name="password"
             placeholder="Contraseña"
           />
-          <button className="button" type="submit" value="Sign in" />
+          <button className="button" type="submit"  value="Sign in" >
+            Iniciar sesión
+          </button>
         </div>
       </form>
     </div>

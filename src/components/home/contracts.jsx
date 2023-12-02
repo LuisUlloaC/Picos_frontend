@@ -18,6 +18,7 @@ import SimCardDownloadIcon from '@mui/icons-material/SimCardDownload';
 export default function ContractsView() {
     const { setState, api } = useContext(Context);
     const [contracts, setContracts] = React.useState([]);
+    const [contractDate, setContractDate] = React.useState('');
     const [loading, setLoading] = React.useState(true);
     const [open, setOpen] = React.useState(false);
     const [openDownloader, setOpenDownloader] = React.useState(false);
@@ -87,9 +88,18 @@ export default function ContractsView() {
         (async () => {
             let response = await getContracts(api);
             setContracts(response.result.contracts);
+            setState(oldState => ({
+                ...oldState,
+                ContractData: {
+                    bank_office: "12345678",
+                    bank_name: "BANDEC",
+                    bank_location: "ciudad",
+                    account_number: "12345678"
+                }
+            }));
             setLoading(false);
         })();
-    }, [api, loading])
+    }, [loading])
 
     return (
         <>
@@ -98,12 +108,14 @@ export default function ContractsView() {
                 open={openDownloader}
                 onClose={handleCloseDownloader}
             >
-                <Box sx={{ ...style, height: '15%' }}>
-                    <h2 id="child-modal-title">Obteniendo archivo...</h2>
+                <Box sx={{ ...style, height: '20%' }}>
+                    <h2 id="child-modal-title">Documento creado</h2>
+                    <><a href={pfdUrl} target="_blank">Visualizar</a></>
                     {loading ? null :
                         <>
-                            <IconButton href={pfdUrl} download='contract.pdf' style={{ display: 'flex' }} sx={{ height: '50%', width: '15%' }} >
+                            <IconButton href={pfdUrl} download={`contract ${contractDate}.pdf`} style={{ display: 'flex' }} sx={{ height: '50%', width: '15%' }} >
                                 <SimCardDownloadIcon sx={{ height: '100%', width: '100%' }} />
+                                <span>Descargar</span>
                             </IconButton>
                         </>
                     }
@@ -129,8 +141,22 @@ export default function ContractsView() {
                             const contract_id = await createNewContractIssue(api, values.template_id,
                                 values.bank_office, values.bank_location, values.bank_name, values.account_number
                             )
-                            handleOpenDownloader(contract_id.response.data.issue_id)
-                            setLoading(true)
+                            handleOpenDownloader(contract_id.response.data.issue_id);
+                            var today = new Date().toJSON().slice(0, 10);
+                            setContractDate(today)
+                            setState(oldState => {
+                                let contract = oldState.ContractData;
+                                contract.bank_location = values.bank_location;
+                                contract.bank_name = values.bank_name;
+                                contract.bank_office = values.bank_office;
+                                contract.account_number = values.account_number;
+                                console.log('here')
+                                return ({
+                                    ...oldState,
+                                    ContractData: contract
+                                })
+                            });
+                            setLoading(true);
                         }}
 
                         style={{
@@ -159,7 +185,7 @@ export default function ContractsView() {
                                         border: 'none', outline: 'none',
                                         borderRadius: 8, width: '40%', textAlign: 'center'
                                     }} name="bank_name" as="select">
-                                        <option className='options' value="">Select...</option>
+                                        <option className='options' value="">Seleccionar</option>
                                         <option className='options' value="BPA">BPA</option>
                                         <option className='options' value="BANDEC">BANDEC</option>
                                     </Field>
@@ -175,7 +201,8 @@ export default function ContractsView() {
                                     <Field className='card-input' name="bank_location" />
                                     {errors.bank_location && touched.bank_location && <ErrorAlert errorBody={errors.bank_location} />}
                                 </div>
-                                <IconButton type="submit" style={{ display: 'flex' }}>
+                                <IconButton type="submit" style={{ display: 'flex', fontFamily: 'Nico Moji' }}>
+                                    <span>Crear</span>
                                     <ArrowForwardIosIcon />
                                 </IconButton>
                             </Form>

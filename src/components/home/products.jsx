@@ -170,7 +170,8 @@ export default function Products() {
                       {errors.price && touched.price && <ErrorAlert errorBody={errors.price} />}
                       </div>
                     </div>
-                    <IconButton type="submit" style={{ display: 'flex' }}>
+                    <IconButton type="submit" style={{ display: 'flex', fontFamily: 'Nico Moji' }}>
+                      <span>Añadir </span>
                       <ArrowForwardIosIcon />
                     </IconButton>
                   </Form>
